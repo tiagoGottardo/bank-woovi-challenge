@@ -23,7 +23,7 @@
     "graphql-http": "^1.22.1",
     "graphql-playground-html": "^1.6.30",
     "koa": "^2.15.3",
-    "koa-bodyparser": "^4.4.1",
+    "mongoose": "^8.4.5",
     "nodemon": "^3.1.4",
     "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2"
@@ -31,7 +31,6 @@
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/koa": "^2.15.0",
-    "@types/koa-bodyparser": "^4.3.12",
     "@types/koa__router": "^12.0.4",
     "@types/supertest": "^6.0.2",
     "graphql-tools": "^9.0.1",

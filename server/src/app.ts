@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 dotenv.config()
 
+import './database/config'
 
 import typeDefs from './schemas/'
 import resolvers from './resolvers/'
