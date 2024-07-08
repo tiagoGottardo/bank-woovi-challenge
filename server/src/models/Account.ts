@@ -16,7 +16,7 @@ const accountSchema = new Schema<IAccount>({
   _id: { type: String, default: uuidv4 },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  cpf: { type: String, required: true },
+  cpf: { type: String, required: true, unique: true },
   date_of_birth: { type: Date, required: true },
   account_key: { type: String, require: true, unique: true },
   password: { type: String, require: true },
