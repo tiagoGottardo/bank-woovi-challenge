@@ -1,8 +1,8 @@
 import { mergeResolvers } from '@graphql-tools/merge'
-import nameResolvers from './name'
+import accountResolvers from './account'
 
 const resolversArray = [
-  nameResolvers
+  accountResolvers
 ];
 
 const resolvers = mergeResolvers(resolversArray)
