@@ -13,4 +13,4 @@ const typeDefsArray = loadFilesSync(schemasPath, { extensions: ['graphql'] })
 
 const typeDefs = mergeTypeDefs(typeDefsArray)
 
-export default typeDefs;
+export default typeDefs

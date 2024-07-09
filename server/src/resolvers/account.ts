@@ -12,9 +12,9 @@ const JWT_SECRET = process.env.JWT_SECRET || 'other-secret'
 const authenticate = (token: string | undefined) => {
   if (token) {
     try {
-      return jwt.verify(token, JWT_SECRET) as { email: string };
+      return jwt.verify(token, JWT_SECRET) as { email: string }
     } catch (e) {
-      return null;
+      return null
     }
   }
 
@@ -44,10 +44,10 @@ export default {
       try {
         accountKeySchema.parse(account_key)
 
-        const existingAccount = await Account.findOne({ account_key });
+        const existingAccount = await Account.findOne({ account_key })
         console.log("ec ", existingAccount)
         if (existingAccount) {
-          throw new Error('an account already uses that key.');
+          throw new Error('an account already uses that key.')
         }
         console.log(emailAccount)
         console.log(account_key)
@@ -60,10 +60,10 @@ export default {
         return "Account key updated succesfully."
       } catch (e) {
         if (e instanceof z.ZodError) {
-          console.error('Validation error:', e.errors[0].message);
+          console.error('Validation error:', e.errors[0].message)
           return e.errors[0].message
         }
-        throw new Error('Failed to update account key, ' + (e as Error).message);
+        throw new Error('Failed to update account key, ' + (e as Error).message)
       }
     },
     deleteAccount: async (_: any, args: any, context: any) => {
@@ -77,16 +77,16 @@ export default {
 
       const account = await Account.findOne({ email: emailAccount }).select("password").select("balance_in_cents")
       if (!account) {
-        throw new Error('Account not found');
+        throw new Error('Account not found')
       }
 
       const valid = await bcrypt.compare(password, account.password)
       if (!valid) {
-        throw new Error('Invalid password');
+        throw new Error('Invalid password')
       }
 
       if (account.balance_in_cents !== 0) {
-        throw new Error('Balance is positive, it must be 0. Withdraw all your money and try again.');
+        throw new Error('Balance is positive, it must be 0. Withdraw all your money and try again.')
       }
 
       await Account.deleteOne({ email: emailAccount })
@@ -97,12 +97,12 @@ export default {
       const { email, password } = args
       const account = await Account.findOne({ email })
       if (!account) {
-        throw new Error('Account not found');
+        throw new Error('Account not found')
       }
 
       const valid = await bcrypt.compare(password, account.password)
       if (!valid) {
-        throw new Error('Invalid password');
+        throw new Error('Invalid password')
       }
 
       return jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' })
@@ -120,19 +120,19 @@ export default {
             { cpf },
             { account_key }
           ]
-        });
+        })
 
         if (existingAccount) {
           if (existingAccount.email === email) {
-            throw new Error('an account already uses that email.');
+            throw new Error('an account already uses that email.')
           } else if (existingAccount.cpf === cpf) {
-            throw new Error('an account already has that CPF.');
+            throw new Error('an account already has that CPF.')
           } else {
-            throw new Error('an account already uses that key.');
+            throw new Error('an account already uses that key.')
           }
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10)
 
         const account = new Account({
           name,
@@ -147,12 +147,12 @@ export default {
         return jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' })
       } catch (e) {
         if (e instanceof z.ZodError) {
-          console.error('Validation error:', e.errors[0].message);
+          console.error('Validation error:', e.errors[0].message)
           return e.errors[0].message
         }
 
-        console.error(e);
-        throw new Error('Failed to create account, ' + (e as Error).message);
+        console.error(e)
+        throw new Error('Failed to create account, ' + (e as Error).message)
       }
     },
   },

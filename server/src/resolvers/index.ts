@@ -5,7 +5,7 @@ import transactionResolvers from './transaction'
 const resolversArray = [
   accountResolvers,
   transactionResolvers
-];
+]
 
 const resolvers = mergeResolvers(resolversArray)
 
