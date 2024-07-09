@@ -3,6 +3,7 @@ type Query {
 }
 
 type Mutation {
+  deleteAccount(password: String!): String
   updateAccountKey(account_key: String!): String
   login(email: String!, password: String!): String
   register(
