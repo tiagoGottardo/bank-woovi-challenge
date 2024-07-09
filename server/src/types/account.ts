@@ -24,7 +24,3 @@ export interface IAccount {
   cpf: string;
   balance_in_cents: number;
 }
-
-export interface Context {
-  user: string;
-}
