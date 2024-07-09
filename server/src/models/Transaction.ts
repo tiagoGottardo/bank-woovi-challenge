@@ -11,7 +11,7 @@ interface ITransaction extends Document {
 }
 
 const accountSchema = new Schema<ITransaction>({
-  _id: { type: String, required: true, unique: true },
+  _id: { type: String, required: true },
   type: { type: String, required: true },
   amount_in_cents: { type: Number, require: true },
   timestamp: { type: Date, default: Date.now(), require: true },

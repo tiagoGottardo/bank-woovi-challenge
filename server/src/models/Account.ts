@@ -13,7 +13,7 @@ interface IAccount extends Document {
 }
 
 const accountSchema = new Schema<IAccount>({
-  _id: { type: String, default: uuidv4, unique: true },
+  _id: { type: String, default: uuidv4 },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   cpf: { type: String, required: true, unique: true },
