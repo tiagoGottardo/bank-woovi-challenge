@@ -1,35 +1,54 @@
 type Query {
-  getTransactions: Account 
+  getTransactions(
+    first: Int
+    last: Int
+    before: String
+    after: String
+  ): TransactionConnection
 }
 
-type Mutation {
-  deposit(
-    idempotencyKey: String!,
-    amount_in_cents: Int!,
-    account_id: String!,
-  ): String
+type TransactionConnection {
+  edges: [TransactionEdge]
+  pageInfo: PageInfo
+}
 
-  withdraw(
-    idempotencyKey: String!,
-    amount_in_cents: Int!,
-    account_id: String!,
-  ): String
+type TransactionEdge {
+  node: Transaction
+  cursor: String
+}
 
-  transfer(
-    idempotencyKey: String! 
-    amount_in_cents: Int! 
-    description: String
-    sender_account_id: String!
-    receiver_account_id: String!
-  ): String
+type PageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String
 }
 
 type Transaction {
-  _id: String! 
+  _id: ID! 
   type: String!
   amount_in_cents: Int! 
   timestamp: String!
   description: String
   sender_account_id: String!
   receiver_account_id: String!
+}
+
+type Mutation {
+  deposit(
+    idempotencyKey: ID!,
+    amount_in_cents: Int!,
+  ): String
+
+  withdraw(
+    idempotencyKey: ID!,
+    amount_in_cents: Int!,
+  ): String
+
+  transfer(
+    idempotencyKey: ID! 
+    amount_in_cents: Int! 
+    description: String
+    receiver_account_key: String!
+  ): String
 }
