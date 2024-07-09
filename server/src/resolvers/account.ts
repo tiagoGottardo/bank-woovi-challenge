@@ -86,7 +86,7 @@ export default {
       }
 
       if (account.balance_in_cents !== 0) {
-        throw new Error('Balance is positive, it must be 0. Withdrawal your money and try again.');
+        throw new Error('Balance is positive, it must be 0. Withdraw all your money and try again.');
       }
 
       await Account.deleteOne({ email: emailAccount })
@@ -124,11 +124,11 @@ export default {
 
         if (existingAccount) {
           if (existingAccount.email === email) {
-            throw new Error('An account already uses that email.');
+            throw new Error('an account already uses that email.');
           } else if (existingAccount.cpf === cpf) {
-            throw new Error('An account already has that CPF.');
+            throw new Error('an account already has that CPF.');
           } else {
-            throw new Error('An account already uses that key.');
+            throw new Error('an account already uses that key.');
           }
         }
 
