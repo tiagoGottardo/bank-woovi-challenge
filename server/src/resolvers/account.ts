@@ -23,9 +23,13 @@ const authenticate = (token: string | undefined) => {
 
 export default {
   Query: {
-    me: async () => {
-      return "me"
-      // return Account.findOne({ username: user.username })
+    me: async (_: any, __: any, context: any) => {
+      const emailAccount = authenticate(context?.token)?.email
+      if (!emailAccount) {
+        throw Error("Token is not valid!")
+      }
+
+      return Account.findOne({ email: emailAccount })
     },
   },
   Mutation: {
