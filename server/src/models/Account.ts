@@ -20,7 +20,7 @@ const accountSchema = new Schema<IAccount>({
   date_of_birth: { type: Date, required: true },
   account_key: { type: String, require: true, unique: true },
   password: { type: String, require: true },
-  balance_in_cents: { type: Number, required: true, min: 0 }
+  balance_in_cents: { type: Number, required: true, min: 0, default: 0 }
 });
 
 const Account: Model<IAccount> = mongoose.model<IAccount>('Account', accountSchema);
