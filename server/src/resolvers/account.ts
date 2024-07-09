@@ -9,6 +9,18 @@ import bcrypt from 'bcryptjs'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'other-secret'
 
+const authenticate = (token: string | undefined) => {
+  if (token) {
+    try {
+      return jwt.verify(token, JWT_SECRET) as { email: string };
+    } catch (e) {
+      return null;
+    }
+  }
+
+  return null
+}
+
 export default {
   Query: {
     me: async () => {
@@ -78,7 +90,6 @@ export default {
         console.error(e);
         throw new Error('Failed to create account, ' + (e as Error).message);
       }
-
     },
   },
 }
