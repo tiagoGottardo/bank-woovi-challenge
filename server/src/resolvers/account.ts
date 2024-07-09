@@ -2,7 +2,7 @@ import Account from '../models/Account'
 import { CreateAccountInput, LoginAccountInput } from '../types/account'
 
 import { z } from 'zod'
-import accountZodSchema from './accountZodSchema'
+import accountZodSchema, { accountKeySchema } from './accountZodSchema'
 
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
@@ -29,6 +29,39 @@ export default {
     },
   },
   Mutation: {
+    updateAccountKey: async (_: undefined, args: any, context: any) => {
+      const emailAccount = authenticate(context?.token)?.email
+      if (!emailAccount) {
+        throw Error("Token is not valid!")
+      }
+
+      const { account_key } = args
+
+      try {
+        accountKeySchema.parse(account_key)
+
+        const existingAccount = await Account.findOne({ account_key });
+        console.log("ec ", existingAccount)
+        if (existingAccount) {
+          throw new Error('an account already uses that key.');
+        }
+        console.log(emailAccount)
+        console.log(account_key)
+
+        await Account.updateOne(
+          { email: emailAccount },
+          { $set: { account_key } }
+        )
+
+        return "Account key updated succesfully."
+      } catch (e) {
+        if (e instanceof z.ZodError) {
+          console.error('Validation error:', e.errors[0].message);
+          return e.errors[0].message
+        }
+        throw new Error('Failed to update account key, ' + (e as Error).message);
+      }
+    },
     login: async (_: undefined, args: LoginAccountInput) => {
       const { email, password } = args
       const account = await Account.findOne({ email })
