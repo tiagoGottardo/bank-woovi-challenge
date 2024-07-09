@@ -1,0 +1,35 @@
+type Query {
+  getTransactions: Account 
+}
+
+type Mutation {
+  deposit(
+    idempotencyKey: String!,
+    amount_in_cents: Int!,
+    account_id: String!,
+  ): String
+
+  withdraw(
+    idempotencyKey: String!,
+    amount_in_cents: Int!,
+    account_id: String!,
+  ): String
+
+  transfer(
+    idempotencyKey: String! 
+    amount_in_cents: Int! 
+    description: String
+    sender_account_id: String!
+    receiver_account_id: String!
+  ): String
+}
+
+type Transaction {
+  _id: String! 
+  type: String!
+  amount_in_cents: Int! 
+  timestamp: String!
+  description: String
+  sender_account_id: String!
+  receiver_account_id: String!
+}
