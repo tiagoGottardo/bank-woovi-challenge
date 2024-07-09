@@ -9,6 +9,11 @@ export interface CreateAccountInput {
   cpf: string;
 }
 
+export interface LoginAccountInput {
+  email: string;
+  password: string;
+}
+
 export interface IAccount {
   _id: UUID;
   name: string;
