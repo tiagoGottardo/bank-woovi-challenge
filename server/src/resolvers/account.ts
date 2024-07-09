@@ -2,7 +2,7 @@ import Account from '../models/Account'
 import { CreateAccountInput, LoginAccountInput } from '../types/account'
 
 import { z } from 'zod'
-import accountZodSchema, { accountKeySchema } from './accountZodSchema'
+import { accountKeySchema, accountSchema } from './zodSchemas'
 
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
@@ -109,7 +109,7 @@ export default {
     },
     register: async (_: undefined, args: CreateAccountInput) => {
       try {
-        accountZodSchema.parse(args)
+        accountSchema.parse(args)
         console.table(args)
 
         const { email, cpf, account_key, name, password, date_of_birth } = args

@@ -61,7 +61,6 @@ const accountKeySchema = z.string().min(8).max(50).regex(/^[A-Za-z0-9_]+$/, {
 })
 
 export {
-  accountKeySchema
+  accountKeySchema,
+  accountSchema
 }
-
-export default accountSchema
