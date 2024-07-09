@@ -19,7 +19,7 @@ function validateCpf(cpf: string): boolean {
   return cpfDigits[9] === firstCheckDigit && cpfDigits[10] === secondCheckDigit
 }
 
-const AccountSchema = z.object({
+const accountSchema = z.object({
   name: z.string().min(5).regex(/^[A-Za-z]+(?:[\s'-][A-Za-z]+){1,}$/, {
     message: "Name must contain at least two words",
   }),
@@ -56,5 +56,12 @@ const AccountSchema = z.object({
     message: "Invalid CPF number.",
   })
 })
+const accountKeySchema = z.string().min(8).max(50).regex(/^[A-Za-z0-9_]+$/, {
+  message: "Account key must contain only letters, numbers, and underscores.",
+})
 
-export default AccountSchema
+export {
+  accountKeySchema
+}
+
+export default accountSchema
