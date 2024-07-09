@@ -1,12 +1,35 @@
 type Query {
-  me: User
+  me: Account 
 }
 
 type Mutation {
-  login(username: String!, password: String!): String
-  register(username: String!, password: String!): String
+  login(email: String!, password: String!): String
+  register(
+    name: String!
+    email: String!
+    password: String!
+    account_key: String!
+    date_of_birth: String!
+    cpf: String!
+  ): String!
 }
 
-type User {
-  username: String!
+type Account {
+  _id: String! 
+  name: String!
+  email: String!
+  password: String!
+  account_key: String!
+  date_of_birth: String!
+  cpf: String!
+  balance_in_cents: Int!
+}
+
+type CreateAccountInput {
+  name: String!
+  email: String!
+  password: String!
+  account_key: String!
+  date_of_birth: String!
+  cpf: String!
 }
