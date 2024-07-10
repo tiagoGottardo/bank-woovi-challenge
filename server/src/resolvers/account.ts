@@ -4,11 +4,10 @@ import { CreateAccountInput, LoginAccountInput } from '../types/account'
 import { z } from 'zod'
 import { accountKeySchema, accountSchema } from './zodSchemas'
 
-import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 
 import { GraphQLContext } from 'modules/graphql/types'
-import { config } from '../config'
+import { generateJwtToken } from '../authentication'
 
 export default {
   Query: {
@@ -22,7 +21,7 @@ export default {
     },
   },
   Mutation: {
-    updateAccountKey: async (_: undefined, args: any, context: GraphQLContext) => {
+    updateAccountKey: async (_: any, args: any, context: GraphQLContext) => {
       const { account } = context
       const { account_key } = args
 
@@ -32,7 +31,7 @@ export default {
         accountKeySchema.parse(account_key)
 
         const existingAccount = await AccountModel.findOne({ account_key })
-        if (existingAccount) { return 'an account already uses that key.' }
+        if (existingAccount) { return 'An account already uses that key.' }
 
         account.account_key = account_key
         await account.save()
@@ -62,7 +61,7 @@ export default {
 
       return "Account deleted succesfully."
     },
-    login: async (_: undefined, args: LoginAccountInput) => {
+    login: async (_: any, args: LoginAccountInput) => {
       const { email, password } = args
 
       const account = await AccountModel.findOne({ email })
@@ -71,9 +70,9 @@ export default {
       const valid = await bcrypt.compare(password, account.password)
       if (!valid) { return 'Invalid password' }
 
-      return jwt.sign({ id: account._id }, config.JWT_SECRET, { expiresIn: '1d' })
+      return generateJwtToken(account)
     },
-    register: async (_: undefined, args: CreateAccountInput) => {
+    register: async (_: any, args: CreateAccountInput) => {
       try {
         const { email, cpf, account_key, name, password, date_of_birth } = accountSchema.parse(args)
 
@@ -87,11 +86,11 @@ export default {
 
         if (existingAccount) {
           if (existingAccount.email === email) {
-            return 'an account already uses that email.'
+            return 'An account already uses that email.'
           } else if (existingAccount.cpf === cpf) {
-            return 'an account already has that CPF.'
+            return 'An account already has that CPF.'
           } else {
-            return 'an account already uses that key.'
+            return 'An account already uses that key.'
           }
         }
 
@@ -105,14 +104,11 @@ export default {
         })
         await account.save()
 
-        return jwt.sign({ id: account._id }, config.JWT_SECRET, { expiresIn: '1d' })
+        return generateJwtToken(account)
       } catch (e) {
-        if (e instanceof z.ZodError) {
-          return ('Validation error:' + e.errors[0].message)
-        }
-
+        if (e instanceof z.ZodError) { return ('Validation error:' + e.errors[0].message) }
         return 'Failed to create account, ' + (e as Error).message
       }
-    },
-  },
+    }
+  }
 }

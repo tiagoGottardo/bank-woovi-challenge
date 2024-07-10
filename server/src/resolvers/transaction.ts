@@ -153,6 +153,6 @@ export default {
       await account.save()
 
       return "Withdraw realized succesfully."
-    },
+    }
   }
 }
