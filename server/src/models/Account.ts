@@ -11,7 +11,7 @@ export interface Account extends Document {
   date_of_birth: Date
   account_key: string
   password: string
-  balance_in_cents: Number
+  balance_in_cents: number
 }
 
 export interface AccountDocument extends Account {

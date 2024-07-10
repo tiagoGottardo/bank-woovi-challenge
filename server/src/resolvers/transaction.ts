@@ -1,12 +1,12 @@
 import { AccountModel } from '../models/Account'
 import Transaction from '../models/Transaction'
 
-import { DepositInput, WithdrawInput, TransferInput, GetTransactionsInput, Context } from '../types/transaction'
+import { DepositInput, WithdrawInput, TransferInput, GetTransactionsInput } from '../types/transaction'
 
 const DEFAULT_LIMIT = 10
 
+import { GraphQLContext } from 'modules/graphql/types'
 import { Buffer } from 'buffer'
-import { getAccountByToken } from 'authentication'
 
 export const toCursor = (id: string) => {
   return Buffer.from(id).toString('base64')
@@ -18,11 +18,9 @@ export const fromCursor = (cursor: string) => {
 
 export default {
   Query: {
-    getTransactions: async (_: any, args: GetTransactionsInput, context: Context) => {
-      const account: any = getAccountByToken(context.token)
-      if (!account) {
-        throw Error("Token is not valid!")
-      }
+    getTransactions: async (_: any, args: GetTransactionsInput, context: GraphQLContext) => {
+      const { account } = context
+      if (!account) { throw Error("Token is not valid!") }
 
       const { first, last, before, after } = args
 
@@ -44,13 +42,9 @@ export default {
         query._id = { $lt: beforeCursor }
       }
 
-      if (first) {
-        limit = first
-      }
+      if (first) { limit = first }
 
-      if (last) {
-        limit = last
-      }
+      if (last) { limit = last }
 
       const transactions = await Transaction.find(query)
         .sort({ timestamp: -1 })
@@ -76,22 +70,15 @@ export default {
     },
   },
   Mutation: {
-    deposit: async (_: undefined, args: DepositInput, context: Context) => {
-      let account: any = getAccountByToken(context.token)
-      if (!account) {
-        throw Error("Token is not valid!")
-      }
-
+    deposit: async (_: undefined, args: DepositInput, context: GraphQLContext) => {
       const { idempotencyKey, amount_in_cents } = args
+      const { account } = context
 
-      if (amount_in_cents < 0) {
-        throw Error("Amount must be greater than 0.")
-      }
+      if (!account) { throw Error("Token is not valid!") }
+      if (amount_in_cents < 0) { throw Error("Amount must be greater than 0.") }
 
       const existingTransaction = await Transaction.findOne({ _id: idempotencyKey })
-      if (existingTransaction) {
-        return "That transaction already was done."
-      }
+      if (existingTransaction) { return "That transaction already was done." }
 
       const newTransaction = new Transaction({
         _id: idempotencyKey,
@@ -102,38 +89,27 @@ export default {
       })
 
       await newTransaction.save()
-      await AccountModel.updateOne({ _id: account._id }, { $inc: { balance_in_cents: amount_in_cents } })
+      account.balance_in_cents += amount_in_cents
+      await account.save()
 
       return "Deposit realized succesfully."
     },
-    transfer: async (_: undefined, args: TransferInput, context: Context) => {
-      let account: any = getAccountByToken(context.token)
-      if (!account) {
-        throw Error("Token is not valid!")
-      }
+    transfer: async (_: undefined, args: TransferInput, context: GraphQLContext) => {
+      let { account } = context
+      if (!account) { throw Error("Token is not valid!") }
+
       const { idempotencyKey, amount_in_cents, description, receiver_account_key } = args
 
-      if (amount_in_cents < 0) {
-        throw Error("Amount must be greater than 0.")
-      }
-
-      account = await AccountModel.findOne({ _id: account._id }).select("balance_in_cents")
-      if (!account) {
-        throw Error("Account not found.")
-      }
+      if (amount_in_cents < 0) { throw Error("Amount must be greater than 0.") }
 
       const receiverAccount = await AccountModel.findOne({ account_key: receiver_account_key }).select("_id")
-      if (!receiverAccount) {
-        throw Error("Receiver account not found.")
-      }
+      if (!receiverAccount) { throw Error("Receiver account not found.") }
 
-      if ((account.balance_in_cents as number) - amount_in_cents < 0) {
-        throw Error("Transaction amount is greater than your balance.")
-      }
+      if (account.balance_in_cents - amount_in_cents < 0) { throw Error("Transaction amount is greater than your balance.") }
 
       const existingTransaction = await Transaction.findOne({ _id: idempotencyKey })
       if (existingTransaction) {
-        return "That transaction already was done."
+        throw Error("That transaction already was done.")
       }
 
       const newTransaction = new Transaction({
@@ -146,35 +122,23 @@ export default {
       })
 
       await newTransaction.save()
-      await AccountModel.updateOne({ _id: account._id }, { $inc: { balance_in_cents: -amount_in_cents } })
+      account.balance_in_cents -= amount_in_cents
+      await account.save()
       await AccountModel.updateOne({ _id: receiverAccount._id }, { $inc: { balance_in_cents: amount_in_cents } })
 
       return "Transaction realized succesfully."
     },
-    withdraw: async (_: undefined, args: WithdrawInput, context: Context) => {
-      let account: any = getAccountByToken(context.token)
-      if (!account) {
-        throw Error("Token is not valid!")
-      }
+    withdraw: async (_: undefined, args: WithdrawInput, context: GraphQLContext) => {
       const { idempotencyKey, amount_in_cents } = args
+      let { account } = context
+      if (!account) { throw Error("Token is not valid!") }
 
-      if (amount_in_cents < 0) {
-        throw Error("Amount must be greater than 0.")
-      }
+      if (amount_in_cents < 0) { throw Error("Amount must be greater than 0.") }
 
-      account = await AccountModel.findOne({ _id: account._id }).select("balance_in_cents")
-      if (!account) {
-        throw Error("Account not found.")
-      }
-
-      if ((account.balance_in_cents as number) - amount_in_cents < 0) {
-        throw Error("Your withdrawal amount is greater than your balance.")
-      }
+      if (account.balance_in_cents - amount_in_cents < 0) { throw Error("Your withdrawal amount is greater than your balance.") }
 
       const existingTransaction = await Transaction.findOne({ _id: idempotencyKey })
-      if (existingTransaction) {
-        return "That transaction already was done."
-      }
+      if (existingTransaction) { return "That transaction already was done." }
 
       const newTransaction = new Transaction({
         _id: idempotencyKey,
@@ -185,7 +149,8 @@ export default {
       })
 
       await newTransaction.save()
-      await AccountModel.updateOne({ _id: account._id }, { $inc: { balance_in_cents: -amount_in_cents } })
+      account.balance_in_cents -= amount_in_cents
+      await account.save()
 
       return "Withdraw realized succesfully."
     },

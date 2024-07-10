@@ -33,7 +33,3 @@ export interface ITransaction {
   sender_account_id: string,
   receiver_account_id: string,
 }
-
-export interface Context {
-  token?: string
-}

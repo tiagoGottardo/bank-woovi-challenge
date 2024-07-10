@@ -1,10 +1,12 @@
-import Koa from 'koa'
+import Koa, { Request } from 'koa'
 import Router from '@koa/router'
 
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { createHandler } from 'graphql-http/lib/use/koa'
-
 import { renderPlaygroundPage } from 'graphql-playground-html'
+
+import { getAccountByToken } from './authentication'
+import { getContext } from './getContext'
 
 import dotenv from 'dotenv'
 dotenv.config()
@@ -34,9 +36,10 @@ router.all('/playground', async (ctx: Koa.Context) => {
 
 router.all('/graphql', createHandler({
   schema,
-  context: (ctx: any) => ({
-    token: ctx?.headers?.authorization
-  })
+  context: async (req: Request): Promise<any> => {
+    const { account } = await getAccountByToken(req.headers.authorization)
+    return getContext({ account, req })
+  }
 }))
 
 app
