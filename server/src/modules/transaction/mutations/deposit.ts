@@ -22,7 +22,7 @@ export const depositMutation = mutationWithClientMutationId({
     const newTransaction = new TransactionModel({
       _id: idempotencyKey,
       amount_in_cents,
-      receiver_account_id: account._id
+      receiver_account: account._id
     })
 
     await newTransaction.save()
@@ -35,7 +35,7 @@ export const depositMutation = mutationWithClientMutationId({
     }
   },
   outputFields: () => ({
-    postEdge: {
+    transactionEdge: {
       type: TransactionConnection.edgeType,
       resolve: async ({ id }: any, _, context) => {
         const transaction = await TransactionLoader.load(context, id)

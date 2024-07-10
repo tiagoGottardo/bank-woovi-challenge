@@ -1,10 +1,8 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
-import { v4 as uuidv4 } from 'uuid'
 
 import bcrypt from 'bcryptjs'
 
 export interface Account extends Document {
-  _id: string
   name: string
   email: string
   cpf: string
@@ -20,7 +18,6 @@ export interface AccountDocument extends Account {
 }
 
 const AccountSchema = new Schema<Account>({
-  _id: { type: String, default: uuidv4 },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   cpf: { type: String, required: true, unique: true },
