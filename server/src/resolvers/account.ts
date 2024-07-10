@@ -1,4 +1,4 @@
-import { AccountModel } from '../models/Account'
+import { AccountModel } from '../modules/account/AccountModel'
 import { CreateAccountInput, LoginAccountInput } from '../types/account'
 
 import { z } from 'zod'

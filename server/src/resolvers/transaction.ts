@@ -1,5 +1,5 @@
-import { AccountModel } from '../models/Account'
-import Transaction from '../models/Transaction'
+import { AccountModel } from '../modules/account/AccountModel'
+import Transaction from '../modules/transaction/TransactionModel'
 
 import { DepositInput, WithdrawInput, TransferInput, GetTransactionsInput } from '../types/transaction'
 

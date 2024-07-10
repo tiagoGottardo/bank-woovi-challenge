@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-import { Account, AccountModel } from './models/Account'
+import { Account, AccountModel } from './modules/account/AccountModel'
 import { config } from './config'
 
 export const getAccountByToken = async (token: string | null | undefined) => {
