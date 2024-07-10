@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@entria/graphql-mongo-helpers':
+        specifier: ^1.1.2
+        version: 1.1.2(dataloader@2.2.2)(graphql-relay@0.10.1(graphql@16.9.0))(graphql@16.9.0)(mongoose@8.4.5)
       '@graphql-tools/load-files':
         specifier: ^7.0.0
         version: 7.0.0(graphql@16.9.0)
@@ -35,6 +38,9 @@ importers:
       graphql-playground-html:
         specifier: ^1.6.30
         version: 1.6.30
+      graphql-relay:
+        specifier: ^0.10.1
+        version: 0.10.1(graphql@16.9.0)
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
@@ -288,6 +294,21 @@ packages:
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
+
+  '@entria/graphql-mongo-helpers@1.1.2':
+    resolution: {integrity: sha512-MkQJdl4/FCAfRx0a5SmDuv+yT+ers9ZleIBYHswwVaCeTXbQQRJxLRQd13yawFfGS1XOZCEzvCsbjQididn/Gg==}
+    peerDependencies:
+      dataloader: '*'
+      graphql: '>=16.0.0'
+      graphql-relay: '*'
+      mongoose: '*'
+
+  '@entria/graphql-mongoose-loader@4.4.0':
+    resolution: {integrity: sha512-RcNdqPQf/GlnQch1IyUOTMTw13k+zE7zK9JeMd5cUGnShI/ih4k1JZEEtJDwyRwW1bOqAhlmP8dyY1CY8iPX8Q==}
+    peerDependencies:
+      graphql: '*'
+      graphql-relay: '*'
+      mongoose: '*'
 
   '@graphql-tools/load-files@7.0.0':
     resolution: {integrity: sha512-P98amERIwI7FD8Bsq6xUbz9Mj63W8qucfrE/WQjad5jFMZYdFFt46a99FFdfx8S/ZYgpAlj/AZbaTtWLitMgNQ==}
@@ -830,6 +851,9 @@ packages:
   cssfilter@0.0.10:
     resolution: {integrity: sha512-FAaLDaplstoRsDR8XGYH51znUN0UY7nMc6Z9/fvE8EXGwvJE9hu7W2vHwx1+bd6gCYnln9nLbzxFTrcO9YQDZw==}
 
+  dataloader@2.2.2:
+    resolution: {integrity: sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==}
+
   debug@4.3.5:
     resolution: {integrity: sha512-pt0bNEmneDIvdL1Xsd9oDQ/wrQRkXDT4AUWlNZNPKvW5x/jyO9VFXkJUP07vQ2upmw5PlaITaPKc31jK13V+jg==}
     engines: {node: '>=6.0'}
@@ -1063,6 +1087,12 @@ packages:
 
   graphql-playground-html@1.6.30:
     resolution: {integrity: sha512-tpCujhsJMva4aqE8ULnF7/l3xw4sNRZcSHu+R00VV+W0mfp+Q20Plvcrp+5UXD+2yS6oyCXncA+zoQJQqhGCEw==}
+
+  graphql-relay@0.10.1:
+    resolution: {integrity: sha512-8AtwSe6B0/b4+YzynHr38PP7S+zX5Vs5LEo0BEzGCPq/THAiHa5H5ZLf3bRbKbok15ADxDQSsGJmlqXeJDDPIw==}
+    engines: {node: ^12.20.0 || ^14.15.0 || >= 15.9.0}
+    peerDependencies:
+      graphql: ^16.2.0
 
   graphql-tag@2.12.6:
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
@@ -2305,6 +2335,20 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
+  '@entria/graphql-mongo-helpers@1.1.2(dataloader@2.2.2)(graphql-relay@0.10.1(graphql@16.9.0))(graphql@16.9.0)(mongoose@8.4.5)':
+    dependencies:
+      '@entria/graphql-mongoose-loader': 4.4.0(graphql-relay@0.10.1(graphql@16.9.0))(graphql@16.9.0)(mongoose@8.4.5)
+      dataloader: 2.2.2
+      graphql: 16.9.0
+      graphql-relay: 0.10.1(graphql@16.9.0)
+      mongoose: 8.4.5
+
+  '@entria/graphql-mongoose-loader@4.4.0(graphql-relay@0.10.1(graphql@16.9.0))(graphql@16.9.0)(mongoose@8.4.5)':
+    dependencies:
+      graphql: 16.9.0
+      graphql-relay: 0.10.1(graphql@16.9.0)
+      mongoose: 8.4.5
+
   '@graphql-tools/load-files@7.0.0(graphql@16.9.0)':
     dependencies:
       globby: 11.1.0
@@ -3018,6 +3062,8 @@ snapshots:
 
   cssfilter@0.0.10: {}
 
+  dataloader@2.2.2: {}
+
   debug@4.3.5(supports-color@5.5.0):
     dependencies:
       ms: 2.1.2
@@ -3224,6 +3270,10 @@ snapshots:
   graphql-playground-html@1.6.30:
     dependencies:
       xss: 1.0.15
+
+  graphql-relay@0.10.1(graphql@16.9.0):
+    dependencies:
+      graphql: 16.9.0
 
   graphql-tag@2.12.6(graphql@16.9.0):
     dependencies:
