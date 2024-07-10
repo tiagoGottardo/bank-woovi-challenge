@@ -3,7 +3,7 @@ import { mutationWithClientMutationId } from 'graphql-relay'
 
 import { AccountModel } from '../AccountModel'
 import { generateJwtToken } from '../../../authentication'
-import { accountSchema } from 'resolvers/zodSchemas'
+import { accountSchema } from 'zodSchemas'
 import { z } from 'zod'
 import { AccountType } from '../AccountType'
 

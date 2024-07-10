@@ -2,7 +2,7 @@ import { GraphQLString, GraphQLNonNull } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 
 import { AccountModel } from '../AccountModel'
-import { accountKeySchema } from '../../../resolvers/zodSchemas'
+import { accountKeySchema } from 'zodSchemas'
 import { z } from 'zod'
 import { GraphQLContext } from 'modules/graphql/types'
 

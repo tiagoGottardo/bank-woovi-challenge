@@ -2,7 +2,7 @@ import { AccountModel } from '../modules/account/AccountModel'
 import { CreateAccountInput, LoginAccountInput } from '../types/account'
 
 import { z } from 'zod'
-import { accountKeySchema, accountSchema } from './zodSchemas'
+import { accountKeySchema, accountSchema } from 'zodSchemas'
 
 import bcrypt from 'bcryptjs'
 
@@ -13,11 +13,8 @@ export default {
   Query: {
     me: async (_: any, __: any, context: GraphQLContext) => {
       const { account } = context
-      if (!account) {
-        throw Error("Token invalid")
-      }
-
-      return await AccountModel.findOne({ _id: account._id })
+      if (!account) { throw Error("Token invalid") }
+      return account
     },
   },
   Mutation: {
