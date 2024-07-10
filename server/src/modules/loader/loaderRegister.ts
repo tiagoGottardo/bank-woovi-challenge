@@ -1,7 +1,6 @@
 export interface DataLoaders {
   AccountLoader: ReturnType<typeof import('../account/AccountLoader').getLoader>
-  // PostLoader: ReturnType<typeof import('../post/PostLoader').getLoader>
-  // VoteLoader: ReturnType<typeof import('../vote/VoteLoader').getLoader>
+  TransactionLoader: ReturnType<typeof import('../transaction/TransactionLoader').getLoader>
 }
 
 const loaders: {
