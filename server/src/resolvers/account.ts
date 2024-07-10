@@ -8,8 +8,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 
 import { GraphQLContext } from 'modules/graphql/types'
-
-const JWT_SECRET = process.env.JWT_SECRET || 'other-secret'
+import { config } from '../config'
 
 export default {
   Query: {
@@ -27,15 +26,13 @@ export default {
       const { account } = context
       const { account_key } = args
 
-      if (!account) { throw Error("Token is not valid!") }
+      if (!account) { return "Token is not valid!" }
 
       try {
         accountKeySchema.parse(account_key)
 
         const existingAccount = await AccountModel.findOne({ account_key })
-        if (existingAccount) {
-          throw new Error('an account already uses that key.')
-        }
+        if (existingAccount) { return 'an account already uses that key.' }
 
         account.account_key = account_key
         await account.save()
@@ -43,23 +40,22 @@ export default {
         return "Account key updated succesfully."
       } catch (e) {
         if (e instanceof z.ZodError) {
-          console.error('Validation error:', e.errors[0].message)
           return e.errors[0].message
         }
-        throw new Error('Failed to update account key, ' + (e as Error).message)
+        return 'Failed to update account key, ' + (e as Error).message
       }
     },
     deleteAccount: async (_: any, args: any, context: GraphQLContext) => {
       const { account } = context
-      if (!account) { throw Error("Token is not valid!") }
+      if (!account) { return "Token is not valid!" }
 
       const { password } = args
 
       const valid = await bcrypt.compare(password, account.password)
-      if (!valid) { throw new Error('Invalid password') }
+      if (!valid) { return 'Invalid password' }
 
       if (account.balance_in_cents !== 0) {
-        throw new Error('Balance is positive, it must be 0. Withdraw all your money and try again.')
+        return 'Balance is positive, it must be 0. Withdraw all your money and try again.'
       }
 
       await account.deleteOne()
@@ -70,12 +66,12 @@ export default {
       const { email, password } = args
 
       const account = await AccountModel.findOne({ email })
-      if (!account) { throw new Error('Account not found') }
+      if (!account) { return 'Account not found' }
 
       const valid = await bcrypt.compare(password, account.password)
-      if (!valid) { throw new Error('Invalid password') }
+      if (!valid) { return 'Invalid password' }
 
-      return jwt.sign({ id: account._id }, JWT_SECRET, { expiresIn: '1d' })
+      return jwt.sign({ id: account._id }, config.JWT_SECRET, { expiresIn: '1d' })
     },
     register: async (_: undefined, args: CreateAccountInput) => {
       try {
@@ -91,11 +87,11 @@ export default {
 
         if (existingAccount) {
           if (existingAccount.email === email) {
-            throw new Error('an account already uses that email.')
+            return 'an account already uses that email.'
           } else if (existingAccount.cpf === cpf) {
-            throw new Error('an account already has that CPF.')
+            return 'an account already has that CPF.'
           } else {
-            throw new Error('an account already uses that key.')
+            return 'an account already uses that key.'
           }
         }
 
@@ -109,11 +105,13 @@ export default {
         })
         await account.save()
 
-        return jwt.sign({ id: account._id }, JWT_SECRET, { expiresIn: '1d' })
+        return jwt.sign({ id: account._id }, config.JWT_SECRET, { expiresIn: '1d' })
       } catch (e) {
-        if (e instanceof z.ZodError) { console.error('Validation error:', e.errors[0].message) }
+        if (e instanceof z.ZodError) {
+          return ('Validation error:' + e.errors[0].message)
+        }
 
-        throw new Error('Failed to create account, ' + (e as Error).message)
+        return 'Failed to create account, ' + (e as Error).message
       }
     },
   },

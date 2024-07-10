@@ -74,8 +74,8 @@ export default {
       const { idempotencyKey, amount_in_cents } = args
       const { account } = context
 
-      if (!account) { throw Error("Token is not valid!") }
-      if (amount_in_cents < 0) { throw Error("Amount must be greater than 0.") }
+      if (!account) { return "Token is not valid!" }
+      if (amount_in_cents < 0) { return "Amount must be greater than 0." }
 
       const existingTransaction = await Transaction.findOne({ _id: idempotencyKey })
       if (existingTransaction) { return "That transaction already was done." }
@@ -96,20 +96,20 @@ export default {
     },
     transfer: async (_: undefined, args: TransferInput, context: GraphQLContext) => {
       let { account } = context
-      if (!account) { throw Error("Token is not valid!") }
+      if (!account) { return "Token is not valid!" }
 
       const { idempotencyKey, amount_in_cents, description, receiver_account_key } = args
 
-      if (amount_in_cents < 0) { throw Error("Amount must be greater than 0.") }
+      if (amount_in_cents < 0) { return "Amount must be greater than 0." }
 
       const receiverAccount = await AccountModel.findOne({ account_key: receiver_account_key }).select("_id")
-      if (!receiverAccount) { throw Error("Receiver account not found.") }
+      if (!receiverAccount) { return "Receiver account not found." }
 
-      if (account.balance_in_cents - amount_in_cents < 0) { throw Error("Transaction amount is greater than your balance.") }
+      if (account.balance_in_cents - amount_in_cents < 0) { return "Transaction amount is greater than your balance." }
 
       const existingTransaction = await Transaction.findOne({ _id: idempotencyKey })
       if (existingTransaction) {
-        throw Error("That transaction already was done.")
+        return "That transaction already was done."
       }
 
       const newTransaction = new Transaction({
@@ -131,11 +131,11 @@ export default {
     withdraw: async (_: undefined, args: WithdrawInput, context: GraphQLContext) => {
       const { idempotencyKey, amount_in_cents } = args
       let { account } = context
-      if (!account) { throw Error("Token is not valid!") }
+      if (!account) { return "Token is not valid!" }
 
-      if (amount_in_cents < 0) { throw Error("Amount must be greater than 0.") }
+      if (amount_in_cents < 0) { return "Amount must be greater than 0." }
 
-      if (account.balance_in_cents - amount_in_cents < 0) { throw Error("Your withdrawal amount is greater than your balance.") }
+      if (account.balance_in_cents - amount_in_cents < 0) { return "Your withdrawal amount is greater than your balance." }
 
       const existingTransaction = await Transaction.findOne({ _id: idempotencyKey })
       if (existingTransaction) { return "That transaction already was done." }
