@@ -1,25 +1,25 @@
-import mongoose, { Document, Model, Schema } from 'mongoose'
+import mongoose, { Document, Model, Schema, Types } from 'mongoose'
 
-interface ITransaction extends Document {
+interface Transaction extends Document {
   _id: string,
-  type: string,
   amount_in_cents: number,
-  timestamp: Date,
-  description: string,
-  sender_account_id: string,
-  receiver_account_id: string,
+  createdAt: Date,
+  sender_account_id: Types.ObjectId,
+  receiver_account_id: Types.ObjectId,
 }
 
-const accountSchema = new Schema<ITransaction>({
+const TransactionSchema = new Schema<Transaction>({
   _id: { type: String, required: true },
-  type: { type: String, required: true },
   amount_in_cents: { type: Number, require: true },
-  timestamp: { type: Date, default: Date.now(), require: true },
-  description: { type: String, default: '' },
-  sender_account_id: { type: String, require: true },
-  receiver_account_id: { type: String, require: true },
+  sender_account_id: { type: Schema.Types.ObjectId, ref: 'Account' },
+  receiver_account_id: { type: Schema.Types.ObjectId, ref: 'Account' },
+}, {
+  collection: 'Transaction',
+  timestamps: {
+    createdAt: true
+  }
 })
 
-const Transaction: Model<ITransaction> = mongoose.model<ITransaction>('Transaction', accountSchema)
+const TransactionModel: Model<Transaction> = mongoose.model<Transaction>('Transaction', TransactionSchema)
 
-export default Transaction
+export default TransactionModel
