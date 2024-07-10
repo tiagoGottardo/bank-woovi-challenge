@@ -1,7 +1,10 @@
 import app from './app'
+import { config } from './config'
 
-const PORT = process.env.PORT || 3000
+import { connectDatabase } from './database'
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}/graphql`)
+await connectDatabase()
+
+app.listen(config.PORT, () => {
+  console.log(`Server is running on http://localhost:${config.PORT}/graphql`)
 })
