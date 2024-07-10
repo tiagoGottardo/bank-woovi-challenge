@@ -1,23 +1,22 @@
 import Koa, { Request } from 'koa'
 import Router from '@koa/router'
 
-import { makeExecutableSchema } from '@graphql-tools/schema'
+// import { makeExecutableSchema } from '@graphql-tools/schema'
 import { createHandler } from 'graphql-http/lib/use/koa'
 import { renderPlaygroundPage } from 'graphql-playground-html'
 
 import { getAccountByToken } from './authentication'
 import { getContext } from './getContext'
 
-import dotenv from 'dotenv'
-dotenv.config()
+import { schema } from './schemas/schema'
 
-import typeDefs from './schemas/'
-import resolvers from './resolvers/'
+// import typeDefs from './schemas/'
+// import resolvers from './resolvers/'
 
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers
-})
+// const schema = makeExecutableSchema({
+//   typeDefs,
+//   resolvers
+// })
 
 const app = new Koa()
 const router = new Router()
