@@ -1,24 +1,12 @@
-import Account from '../models/Account'
+import { AccountModel } from '../models/Account'
 import Transaction from '../models/Transaction'
 
 import { DepositInput, WithdrawInput, TransferInput, GetTransactionsInput, Context } from '../types/transaction'
-import jwt from 'jsonwebtoken'
 
 const DEFAULT_LIMIT = 10
-const JWT_SECRET = process.env.JWT_SECRET || 'other-secret'
 
-const authenticate = (token: string | undefined) => {
-  if (token) {
-    try {
-      return jwt.verify(token, JWT_SECRET) as { email: string }
-    } catch (e) {
-      return null
-    }
-  }
-
-  return null
-}
 import { Buffer } from 'buffer'
+import { getAccountByToken } from 'authentication'
 
 export const toCursor = (id: string) => {
   return Buffer.from(id).toString('base64')
@@ -31,14 +19,9 @@ export const fromCursor = (cursor: string) => {
 export default {
   Query: {
     getTransactions: async (_: any, args: GetTransactionsInput, context: Context) => {
-      const emailAccount = authenticate(context?.token)?.email
-      if (!emailAccount) {
-        throw Error("Token is not valid!")
-      }
-
-      const account = await Account.findOne({ email: emailAccount }).select("_id")
+      const account: any = getAccountByToken(context.token)
       if (!account) {
-        throw Error("Account not found.")
+        throw Error("Token is not valid!")
       }
 
       const { first, last, before, after } = args
@@ -94,20 +77,15 @@ export default {
   },
   Mutation: {
     deposit: async (_: undefined, args: DepositInput, context: Context) => {
-      const emailAccount = authenticate(context?.token)?.email
-      if (!emailAccount) {
+      let account: any = getAccountByToken(context.token)
+      if (!account) {
         throw Error("Token is not valid!")
       }
+
       const { idempotencyKey, amount_in_cents } = args
 
       if (amount_in_cents < 0) {
         throw Error("Amount must be greater than 0.")
-      }
-
-      const account = await Account.findOne({ email: emailAccount })
-      console.table(account)
-      if (!account) {
-        throw Error("Account not found.")
       }
 
       const existingTransaction = await Transaction.findOne({ _id: idempotencyKey })
@@ -124,13 +102,13 @@ export default {
       })
 
       await newTransaction.save()
-      await Account.updateOne({ email: emailAccount }, { $inc: { balance_in_cents: amount_in_cents } })
+      await AccountModel.updateOne({ _id: account._id }, { $inc: { balance_in_cents: amount_in_cents } })
 
       return "Deposit realized succesfully."
     },
     transfer: async (_: undefined, args: TransferInput, context: Context) => {
-      const emailAccount = authenticate(context?.token)?.email
-      if (!emailAccount) {
+      let account: any = getAccountByToken(context.token)
+      if (!account) {
         throw Error("Token is not valid!")
       }
       const { idempotencyKey, amount_in_cents, description, receiver_account_key } = args
@@ -139,12 +117,12 @@ export default {
         throw Error("Amount must be greater than 0.")
       }
 
-      const account = await Account.findOne({ email: emailAccount }).select("balance_in_cents")
+      account = await AccountModel.findOne({ _id: account._id }).select("balance_in_cents")
       if (!account) {
         throw Error("Account not found.")
       }
 
-      const receiverAccount = await Account.findOne({ account_key: receiver_account_key }).select("_id")
+      const receiverAccount = await AccountModel.findOne({ account_key: receiver_account_key }).select("_id")
       if (!receiverAccount) {
         throw Error("Receiver account not found.")
       }
@@ -168,14 +146,14 @@ export default {
       })
 
       await newTransaction.save()
-      await Account.updateOne({ email: emailAccount }, { $inc: { balance_in_cents: -amount_in_cents } })
-      await Account.updateOne({ _id: receiverAccount._id }, { $inc: { balance_in_cents: amount_in_cents } })
+      await AccountModel.updateOne({ _id: account._id }, { $inc: { balance_in_cents: -amount_in_cents } })
+      await AccountModel.updateOne({ _id: receiverAccount._id }, { $inc: { balance_in_cents: amount_in_cents } })
 
       return "Transaction realized succesfully."
     },
     withdraw: async (_: undefined, args: WithdrawInput, context: Context) => {
-      const emailAccount = authenticate(context?.token)?.email
-      if (!emailAccount) {
+      let account: any = getAccountByToken(context.token)
+      if (!account) {
         throw Error("Token is not valid!")
       }
       const { idempotencyKey, amount_in_cents } = args
@@ -184,8 +162,7 @@ export default {
         throw Error("Amount must be greater than 0.")
       }
 
-      const account = await Account.findOne({ email: emailAccount }).select("balance_in_cents")
-      console.table(account)
+      account = await AccountModel.findOne({ _id: account._id }).select("balance_in_cents")
       if (!account) {
         throw Error("Account not found.")
       }
@@ -208,7 +185,7 @@ export default {
       })
 
       await newTransaction.save()
-      await Account.updateOne({ email: emailAccount }, { $inc: { balance_in_cents: -amount_in_cents } })
+      await AccountModel.updateOne({ _id: account._id }, { $inc: { balance_in_cents: -amount_in_cents } })
 
       return "Withdraw realized succesfully."
     },

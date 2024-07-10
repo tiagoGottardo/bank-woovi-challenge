@@ -1,4 +1,4 @@
-import Account from '../models/Account'
+import { AccountModel } from '../models/Account'
 import { CreateAccountInput, LoginAccountInput } from '../types/account'
 
 import { z } from 'zod'
@@ -7,35 +7,22 @@ import { accountKeySchema, accountSchema } from './zodSchemas'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 
+import { getAccountByToken } from '../authentication'
+
 const JWT_SECRET = process.env.JWT_SECRET || 'other-secret'
-
-const authenticate = (token: string | undefined) => {
-  if (token) {
-    try {
-      return jwt.verify(token, JWT_SECRET) as { email: string }
-    } catch (e) {
-      return null
-    }
-  }
-
-  return null
-}
 
 export default {
   Query: {
     me: async (_: any, __: any, context: any) => {
-      const emailAccount = authenticate(context?.token)?.email
-      if (!emailAccount) {
-        throw Error("Token is not valid!")
-      }
+      const account: any = await getAccountByToken(context.token)
 
-      return Account.findOne({ email: emailAccount })
+      return await AccountModel.findOne({ id: account._id })
     },
   },
   Mutation: {
     updateAccountKey: async (_: undefined, args: any, context: any) => {
-      const emailAccount = authenticate(context?.token)?.email
-      if (!emailAccount) {
+      let account: any = await getAccountByToken(context.token)
+      if (!account) {
         throw Error("Token is not valid!")
       }
 
@@ -44,16 +31,13 @@ export default {
       try {
         accountKeySchema.parse(account_key)
 
-        const existingAccount = await Account.findOne({ account_key })
-        console.log("ec ", existingAccount)
+        const existingAccount = await AccountModel.findOne({ account_key })
         if (existingAccount) {
           throw new Error('an account already uses that key.')
         }
-        console.log(emailAccount)
-        console.log(account_key)
 
-        await Account.updateOne(
-          { email: emailAccount },
+        await AccountModel.updateOne(
+          { id: account._id },
           { $set: { account_key } }
         )
 
@@ -67,15 +51,12 @@ export default {
       }
     },
     deleteAccount: async (_: any, args: any, context: any) => {
-      console.log(context?.token)
-      const emailAccount = authenticate(context?.token)?.email
-      console.log(emailAccount)
-      if (!emailAccount) {
-        throw Error("Token is not valid!")
-      }
+      let account: any = getAccountByToken(context.token)
+      if (!account) { throw Error("Token is not valid!") }
+
       const { password } = args
 
-      const account = await Account.findOne({ email: emailAccount }).select("password").select("balance_in_cents")
+      account = await AccountModel.findOne({ id: account._id }).select("password").select("balance_in_cents")
       if (!account) {
         throw new Error('Account not found')
       }
@@ -89,13 +70,13 @@ export default {
         throw new Error('Balance is positive, it must be 0. Withdraw all your money and try again.')
       }
 
-      await Account.deleteOne({ email: emailAccount })
+      await AccountModel.deleteOne({ _id: account._id })
 
       return "Account deleted succesfully."
     },
     login: async (_: undefined, args: LoginAccountInput) => {
       const { email, password } = args
-      const account = await Account.findOne({ email })
+      const account = await AccountModel.findOne({ email })
       if (!account) {
         throw new Error('Account not found')
       }
@@ -105,16 +86,15 @@ export default {
         throw new Error('Invalid password')
       }
 
-      return jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' })
+      return jwt.sign({ id: account._id }, JWT_SECRET, { expiresIn: '1d' })
     },
     register: async (_: undefined, args: CreateAccountInput) => {
       try {
         accountSchema.parse(args)
-        console.table(args)
 
         const { email, cpf, account_key, name, password, date_of_birth } = args
 
-        const existingAccount = await Account.findOne({
+        const existingAccount = await AccountModel.findOne({
           $or: [
             { email },
             { cpf },
@@ -134,7 +114,7 @@ export default {
 
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        const account = new Account({
+        const account = new AccountModel({
           name,
           email,
           cpf,
@@ -144,7 +124,7 @@ export default {
         })
         await account.save()
 
-        return jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' })
+        return jwt.sign({ id: account._id }, JWT_SECRET, { expiresIn: '1d' })
       } catch (e) {
         if (e instanceof z.ZodError) {
           console.error('Validation error:', e.errors[0].message)
