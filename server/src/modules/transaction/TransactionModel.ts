@@ -4,8 +4,8 @@ export interface Transaction extends Document {
   _id: string,
   amount_in_cents: number,
   createdAt: Date,
-  sender_account: Types.ObjectId,
-  receiver_account: Types.ObjectId,
+  sender_account: Types.ObjectId | null,
+  receiver_account: Types.ObjectId | null,
 }
 
 export interface TransactionDocument extends Transaction { }

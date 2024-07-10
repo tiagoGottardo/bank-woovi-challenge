@@ -11,9 +11,6 @@ const {
   loadAll,
 } = createLoader({
   model: TransactionModel,
-  // filterMapping: {
-  //   name: "tiago"
-  // },
   loaderName: 'TransactionLoader',
 })
 

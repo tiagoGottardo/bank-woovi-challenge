@@ -19,11 +19,17 @@ export const TransactionType = new GraphQLObjectType<TransactionDocument>({
     },
     sender_account: {
       type: AccountType,
-      resolve: (transaction, _, context) => AccountLoader.load(context, transaction.sender_account._id),
+      resolve: (transaction, _, context) => {
+        if (!(transaction.sender_account)) { return null }
+        return AccountLoader.load(context, transaction.sender_account._id)
+      }
     },
     receiver_account: {
       type: AccountType,
-      resolve: (transaction, _, context) => AccountLoader.load(context, transaction.receiver_account._id),
+      resolve: (transaction, _, context) => {
+        if (!(transaction.receiver_account)) { return null }
+        return AccountLoader.load(context, transaction.receiver_account._id)
+      }
     },
     createdAt: {
       type: new GraphQLNonNull(GraphQLString),
