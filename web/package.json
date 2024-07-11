@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "relay-compiler && vite",
     "build": "relay-compiler --validate && tsc -b && vite build",
     "relay": "relay-compiler"
   },
