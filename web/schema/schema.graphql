@@ -1,0 +1,225 @@
+"""Exposes a URL that specifies the behavior of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behavior of this scalar."""
+  url: String!
+) on SCALAR
+
+"""
+Indicates exactly one field must be supplied and this field must not be `null`.
+"""
+directive @oneOf on INPUT_OBJECT
+
+"""Account Type"""
+type Account implements Node {
+  """The ID of an object"""
+  id: ID!
+  name: String!
+  password: String!
+  email: String!
+  cpf: String!
+  balance_in_cents: String!
+  account_key: String!
+  date_of_birth: String!
+}
+
+input AccountLoginInput {
+  email: String!
+  password: String!
+  clientMutationId: String
+}
+
+type AccountLoginPayload {
+  token: String
+  success: String
+  me: Account
+  clientMutationId: String
+}
+
+input AccountRegisterInput {
+  name: String!
+  password: String!
+  email: String!
+  cpf: String!
+  account_key: String!
+  date_of_birth: String!
+  clientMutationId: String
+}
+
+type AccountRegisterPayload {
+  token: String
+  success: String
+  me: Account
+  clientMutationId: String
+}
+
+"""A connection to a list of items."""
+interface Connection {
+  """Number of items in this connection."""
+  count: Int
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+  This allows a client to fetch the first five objects by passing "5" as the
+  argument to "first", then fetch the total count so it could display "5 of 83",
+  for example.
+  """
+  totalCount: Int
+
+  """Offset from start."""
+  startCursorOffset: Int!
+
+  """Offset till end."""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+input DeleteAccountKeyInput {
+  password: String!
+  clientMutationId: String
+}
+
+type DeleteAccountKeyPayload {
+  success: String
+  clientMutationId: String
+}
+
+input DepositInput {
+  idempotencyKey: ID!
+  amount_in_cents: Int!
+  clientMutationId: String
+}
+
+type DepositPayload {
+  transactionEdge: TransactionEdge
+  clientMutationId: String
+}
+
+"""Root mutation"""
+type Mutation {
+  accountLoginMutation(input: AccountLoginInput!): AccountLoginPayload
+  accountRegisterMutation(input: AccountRegisterInput!): AccountRegisterPayload
+  deleteAccountMutation(input: DeleteAccountKeyInput!): DeleteAccountKeyPayload
+  updateAccountKeyMutation(input: UpdateAccountKeyInput!): UpdateAccountKeyPayload
+  depositMutation(input: DepositInput!): DepositPayload
+  transferMutation(input: TransferInput!): TransferPayload
+  withdrawMutation(input: WithdrawInput!): WithdrawPayload
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""Root query"""
+type Query {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Fetches objects given their IDs"""
+  nodes(
+    """The IDs of objects"""
+    ids: [ID!]!
+  ): [Node]!
+  getTransactionsQuery(after: String, first: Int, before: String, last: Int): TransactionConnection!
+  meQuery: Account
+}
+
+"""Transaction Type"""
+type Transaction implements Node {
+  """The ID of an object"""
+  id: ID!
+  amount_in_cents: Int!
+  sender_account: Account
+  receiver_account: Account
+  createdAt: String!
+}
+
+"""A connection to a list of items."""
+type TransactionConnection implements Connection {
+  """Number of items in this connection."""
+  count: Int
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+  This allows a client to fetch the first five objects by passing "5" as the
+  argument to "first", then fetch the total count so it could display "5 of 83",
+  for example.
+  """
+  totalCount: Int
+
+  """Offset from start."""
+  startCursorOffset: Int!
+
+  """Offset till end."""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [TransactionEdge]!
+}
+
+"""An edge in a connection."""
+type TransactionEdge {
+  """The item at the end of the edge."""
+  node: Transaction
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+input TransferInput {
+  idempotencyKey: ID!
+  amount_in_cents: Int!
+  receiver_account_key: String!
+  clientMutationId: String
+}
+
+type TransferPayload {
+  transactionEdge: TransactionEdge
+  clientMutationId: String
+}
+
+input UpdateAccountKeyInput {
+  account_key: String!
+  clientMutationId: String
+}
+
+type UpdateAccountKeyPayload {
+  success: String
+  clientMutationId: String
+}
+
+input WithdrawInput {
+  idempotencyKey: ID!
+  amount_in_cents: Int!
+  clientMutationId: String
+}
+
+type WithdrawPayload {
+  transactionEdge: TransactionEdge
+  clientMutationId: String
+}
+

@@ -1,13 +1,14 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import relay from "vite-plugin-relay";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
-import fs from 'node:fs'
+import fs from "node:fs";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [relay, react()],
   esbuild: {
-    loader: 'tsx',
+    loader: "tsx",
     include: /src\/.*\.tsx?$/,
     exclude: [],
   },
@@ -15,15 +16,15 @@ export default defineConfig({
     esbuildOptions: {
       plugins: [
         {
-          name: 'load-js-files-as-jsx',
+          name: "load-js-files-as-jsx",
           setup(build) {
             build.onLoad({ filter: /src\/.*\.js$/ }, async (args) => ({
-              loader: 'jsx',
-              contents: await fs.promises.readFile(args.path, 'utf8'),
+              loader: "jsx",
+              contents: await fs.promises.readFile(args.path, "utf8"),
             }));
           },
         },
       ],
     },
   },
-})
+});
