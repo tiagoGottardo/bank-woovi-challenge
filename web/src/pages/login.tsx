@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { commitMutation, graphql } from 'react-relay'
-import environment, { setAuthToken } from '../relay/relayEnvironment'
+import { RelayEnvironment, setAuthToken } from '../relay/RelayEnvironment'
 import { useNavigate } from 'react-router-dom'
 
 const mutation = graphql`
@@ -18,7 +18,7 @@ const mutation = graphql`
 `;
 
 const login = (input: { username: string; password: string }, onCompleted: (response: any) => void, onError: (error: Error) => void) => {
-  commitMutation(environment, {
+  commitMutation(RelayEnvironment, {
     mutation,
     variables: {
       input,

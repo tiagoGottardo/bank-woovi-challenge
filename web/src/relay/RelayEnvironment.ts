@@ -6,10 +6,12 @@ import {
   FetchFunction,
 } from "relay-runtime";
 
-const HTTP_ENDPOINT = "http://localhost:5000/graphql";
+let authToken: string | null = null;
+
+const HTTP_ENDPOINT = "http://localhost:3000/graphql";
 
 const fetchFn: FetchFunction = async (request, variables) => {
-  const resp = await fetch(HTTP_ENDPOINT, {
+  return fetch(HTTP_ENDPOINT, {
     method: "POST",
     headers: {
       Accept:
@@ -21,10 +23,20 @@ const fetchFn: FetchFunction = async (request, variables) => {
       query: request.text, // <-- The GraphQL document composed by Relay
       variables,
     }),
+  }).then(response => {
+    return response.json()
+  }).then(json => {
+    if (json && json.errors) {
+      throw new Error(json.errors[0].message)
+    }
+    return json;
   });
 
-  return await resp.json();
-};
+}
+
+export const setAuthToken = (token: string) => {
+  authToken = token;
+}
 
 function createRelayEnvironment() {
   return new Environment({
