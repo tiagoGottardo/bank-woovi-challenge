@@ -1,5 +1,6 @@
 import Koa, { Request } from 'koa'
 import Router from '@koa/router'
+import cors from '@koa/cors'
 
 import { createHandler } from 'graphql-http/lib/use/koa'
 import { renderPlaygroundPage } from 'graphql-playground-html'
@@ -31,7 +32,9 @@ router.all('/graphql', createHandler({
 }))
 
 app
+  .use(cors())
   .use(router.routes())
   .use(router.allowedMethods())
+
 
 export default app
