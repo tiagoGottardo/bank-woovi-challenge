@@ -6,10 +6,10 @@ import RegisterPage from './pages/register'
 import LoginPage from './pages/login.tsx'
 
 import './styles/globals.css'
-import { createBrowserRouter, RouterProvider, } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, } from "react-router-dom"
 import { AuthProvider } from './context/auth.tsx'
 import PrivateRoute from './private.tsx'
-import { RelayEnvironmentProvider } from 'react-relay/hooks';
+import { RelayEnvironmentProvider } from 'react-relay/hooks'
 import { RelayEnvironment } from './relay/RelayEnvironment.ts'
 
 const router = createBrowserRouter([
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     element: <RegisterPage />,
     errorElement: <ErrorPage />
   }
-]);
+])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3c9523be0f08eb68504bd5b42648e738>>
+ * @generated SignedSource<<e046e4cb83d14b8d30c30d51bdf3fe75>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,12 +19,6 @@ export type loginMutation$variables = {
 };
 export type loginMutation$data = {
   readonly accountLoginMutation: {
-    readonly me: {
-      readonly cpf: string;
-      readonly date_of_birth: string;
-      readonly name: string;
-    } | null | undefined;
-    readonly success: string | null | undefined;
     readonly token: string | null | undefined;
   } | null | undefined;
 };
@@ -43,81 +37,37 @@ var v0 = [
 ],
 v1 = [
   {
-    "kind": "Variable",
-    "name": "input",
-    "variableName": "input"
+    "alias": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "input",
+        "variableName": "input"
+      }
+    ],
+    "concreteType": "AccountLoginPayload",
+    "kind": "LinkedField",
+    "name": "accountLoginMutation",
+    "plural": false,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "token",
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
   }
-],
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "name",
-  "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "date_of_birth",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "cpf",
-  "storageKey": null
-},
-v5 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "success",
-  "storageKey": null
-},
-v6 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "token",
-  "storageKey": null
-};
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "loginMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": "AccountLoginPayload",
-        "kind": "LinkedField",
-        "name": "accountLoginMutation",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "Account",
-            "kind": "LinkedField",
-            "name": "me",
-            "plural": false,
-            "selections": [
-              (v2/*: any*/),
-              (v3/*: any*/),
-              (v4/*: any*/)
-            ],
-            "storageKey": null
-          },
-          (v5/*: any*/),
-          (v6/*: any*/)
-        ],
-        "storageKey": null
-      }
-    ],
+    "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -126,54 +76,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "loginMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": "AccountLoginPayload",
-        "kind": "LinkedField",
-        "name": "accountLoginMutation",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "Account",
-            "kind": "LinkedField",
-            "name": "me",
-            "plural": false,
-            "selections": [
-              (v2/*: any*/),
-              (v3/*: any*/),
-              (v4/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          },
-          (v5/*: any*/),
-          (v6/*: any*/)
-        ],
-        "storageKey": null
-      }
-    ]
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "da6b4feef17d99e46cfb7ff14df8faf6",
+    "cacheID": "d3e984f752705c14c1847630877025b7",
     "id": null,
     "metadata": {},
     "name": "loginMutation",
     "operationKind": "mutation",
-    "text": "mutation loginMutation(\n  $input: AccountLoginInput!\n) {\n  accountLoginMutation(input: $input) {\n    me {\n      name\n      date_of_birth\n      cpf\n      id\n    }\n    success\n    token\n  }\n}\n"
+    "text": "mutation loginMutation(\n  $input: AccountLoginInput!\n) {\n  accountLoginMutation(input: $input) {\n    token\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b950aa7a093415a70d6dd9b4a5cc3ed2";
+(node as any).hash = "26d26b165233f0cbd7a55e1bb2f4a0c0";
 
 export default node;
