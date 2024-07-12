@@ -13,13 +13,10 @@ export const AuthProvider = ({ children }: any) => {
 
   useEffect(() => {
     const token = localStorage.getItem('authToken') || null
-    console.log('---')
-    console.log(token)
-    console.log("useEffect")
     if (token) {
       setIsAuthenticated(true)
     } else {
-      localStorage.removeItem('authToken')
+      setIsAuthenticated(false)
     }
   }, [])
 
