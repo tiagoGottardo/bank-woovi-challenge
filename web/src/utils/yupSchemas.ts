@@ -14,7 +14,7 @@ const registerSchema = yup.object().shape({
   password: yup.string()
     .required("Digite uma senha")
     .min(8, "Sua senha precisa ter, no mínimo, 8 caracteres.")
-    .max(20, "Sua senha precisa ter, no máximo,  caracteres.")
+    .max(20, "Sua senha precisa ter, no máximo, 20 caracteres.")
     .matches(/[A-Z]/, "Sua senha precisa conter uma letra maiúscula.")
     .matches(/[a-z]/, "Sua senha precisa conter uma letra minúscula.")
     .matches(/[0-9]/, "Sua senha precisa conter um número.")
@@ -32,6 +32,20 @@ const registerSchema = yup.object().shape({
     .transform((value) => value.replace(/[.-]/g, ''))
 })
 
+const loginSchema = yup.object().shape({
+  email: yup.string()
+    .required("Digite um email.")
+    .email("Digite um email válido."),
+  password: yup.string()
+    .required("Digite uma senha")
+    .min(8, "Sua senha precisa ter, no mínimo, 8 caracteres.")
+    .max(20, "Sua senha precisa ter, no máximo, 20 caracteres.")
+    .matches(/[A-Z]/, "Sua senha precisa conter uma letra maiúscula.")
+    .matches(/[a-z]/, "Sua senha precisa conter uma letra minúscula.")
+    .matches(/[0-9]/, "Sua senha precisa conter um número.")
+    .matches(/[@#$%^&*()_+!~`\-=<>?[\]{}|;:,./]/, "Sua senha precisa conter um caractere especial."),
+})
+
 const accountKeySchema = yup.string()
   .min(8, "Account key must be at least 8 characters long.")
   .max(50, "Account key must be no longer than 50 characters.")
@@ -39,5 +53,6 @@ const accountKeySchema = yup.string()
 
 export {
   accountKeySchema,
+  loginSchema,
   registerSchema
 }
