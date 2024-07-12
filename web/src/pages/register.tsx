@@ -84,6 +84,7 @@ const Register: React.FC = () => {
                 id="dateOfBirth"
                 type="text"
                 label="Data de nascimento"
+                mask="00/00/0000"
                 touched={touched.dateOfBirth}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -92,6 +93,7 @@ const Register: React.FC = () => {
               />
               <Input
                 id="cpf"
+                mask="000.000.000-00"
                 type="text"
                 label="CPF"
                 touched={touched.cpf}
@@ -111,7 +113,7 @@ const Register: React.FC = () => {
                   </Label>
                 </div>
                 <Button type="submit" className="w-full bg-woovi hover:bg-woovi">
-                  Sign in
+                  Cadastrar
                 </Button>
               </div>
               <div className="text-sm my-8 h-12 items-center justify-center">
