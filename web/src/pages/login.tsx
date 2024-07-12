@@ -18,7 +18,7 @@ const mutation = graphql`
   }
 `
 
-const login = (input: { email: string, password: string }, onCompleted: (response: any) => void, onError: (error: Error) => void) => {
+const login = (input: Login, onCompleted: (response: any) => void, onError: (error: Error) => void) => {
   commitMutation(RelayEnvironment, {
     mutation,
     variables: {
