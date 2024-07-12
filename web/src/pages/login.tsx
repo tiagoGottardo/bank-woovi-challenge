@@ -1,66 +1,68 @@
-import React from 'react'
-import Input from '@/components/Input'
+import React, { useState, useContext } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+
+import { graphql, commitMutation } from 'relay-runtime'
+import { AuthContext } from '@/context/auth'
+import { RelayEnvironment } from '@/relay/RelayEnvironment'
+import { loginSchema } from '../utils/yupSchemas'
+
 import { Formik } from 'formik'
-import { registerSchema } from '../utils/yupSchemas'
 import { Button } from '@/components/ui/button'
-import { Link } from 'react-router-dom'
+import Input from '@/components/Input'
 
+const mutation = graphql`
+  mutation loginMutation($input: AccountLoginInput!) {
+    accountLoginMutation(input: $input) {
+      token
+    }
+  }
+`
 
-// const mutation = graphql`
-//   mutation loginMutation($input: AccountLoginInput!) {
-//     accountLoginMutation(input: $input) {
-//       token
-//     }
-//   }
-// `
+const login = (input: { email: string, password: string }, onCompleted: (response: any) => void, onError: (error: Error) => void) => {
+  commitMutation(RelayEnvironment, {
+    mutation,
+    variables: {
+      input,
+    },
+    onCompleted,
+    onError,
+  })
+}
 
-// const login = (input: { email: string, password: string }, onCompleted: (response: any) => void, onError: (error: Error) => void) => {
-//   commitMutation(RelayEnvironment, {
-//     mutation,
-//     variables: { input,
-//     },
-//     onCompleted,
-//     onError,
-//   })
-// }
+interface Login {
+  email: string,
+  password: string
+}
 
 const Login: React.FC = () => {
-  // const [email, setemail] = useState('')
-  // const [password, setPassword] = useState('')
-  // const [error, setError] = useState('')
-  // const { logIn } = useContext(AuthContext)
-  // const navigate = useNavigate()
+  const { logIn } = useContext(AuthContext)
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
 
-  // const handleLogin = () => {
-  //   login(
-  //     { email, password },
-  //     (response) => {
-  //       logIn(response.accountLoginMutation?.token ?? '')
-  //       navigate('/')
-  //     },
-  //     (error) => {
-  //       setError(error.message)
-  //     }
-  //   )
-  // }
+  const handleLogin = (values: Login) => {
+    login(
+      values,
+      (response) => {
+        console.log(response.accountLoginMutation)
+        logIn(response.accountLoginMutation?.token ?? '')
+        navigate('/')
+      },
+      (_) => {
+        setError("Email ou senha inválidos.")
+      }
+    )
+  }
 
   return (
     <div className="h-screen w-full flex flex-col p-8 items-center  bg-bgwoo">
       <h1 className="text-3xl font-bold m-8 mt-0">woopay</h1>
       <Formik
-        validationSchema={registerSchema}
+        validationSchema={loginSchema}
         initialValues={{
-          name: "",
           email: "",
           password: "",
-          confirmPassword: "",
-          dateOfBirth: "",
-          cpf: ""
         }}
-        onSubmit={(values) => {
-
-          alert(JSON.stringify(values));
-        }}
+        onSubmit={handleLogin}
       >
         {({
           values,
@@ -72,6 +74,7 @@ const Login: React.FC = () => {
         }) => (
           <div className="border rounded-md border-gray-300 w-5/12 flex flex-col pt-8 space-y-6 text-center bg-white">
             <p className="text-muted-foreground font-bold text-3xl">Login</p>
+            {error && <div className="text-red-600 m-2 text-sm">{error}</div>}
             <form onSubmit={handleSubmit} className="space-y-4 w-full">
               <Input
                 id="email"
@@ -93,7 +96,7 @@ const Login: React.FC = () => {
                 error={errors.password}
                 value={values.password}
               />
-              <div className="text-start m-8 my-0">
+              <div className="text-center m-8 my-0">
                 <Button type="submit" className="w-full bg-woovi hover:bg-woovi">
                   Entrar
                 </Button>
