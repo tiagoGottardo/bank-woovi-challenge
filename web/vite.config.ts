@@ -1,6 +1,7 @@
 import relay from "vite-plugin-relay";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from 'path'
 
 import fs from "node:fs";
 
@@ -25,6 +26,11 @@ export default defineConfig({
           },
         },
       ],
+    },
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 });
