@@ -21,15 +21,15 @@ const registerSchema = yup.object().shape({
     .matches(/[@#$%^&*()_+!~`\-=<>?[\]{}|;:,./]/, "Sua senha precisa conter um caractere especial."),
   confirmPassword: yup.string().
     required("Confirme sua senha.")
-    .oneOf([yup.ref('password')], 'Senhas devem ser iguais'),
-  dateOfBirth: yup.date()
-    .required('A data de nascimento é necessária')
-    .max(eighteenYearsAgo, 'Você deve ter 18 anos ou mais'),
+    .oneOf([yup.ref('password')], 'Senhas devem ser iguais.'),
+  dateOfBirth: yup.date().typeError("Digite uma data válida.")
+    .required('A data de nascimento é necessária.')
+    .max(eighteenYearsAgo, 'Você deve ter 18 anos ou mais.'),
   cpf: yup.string()
     .required("Digite seu CPF.")
-    .length(11, "CPF inválido.")
-    .matches(/^\d+$/, "CPF inválido.")
-  // Remove true CPF validation to facilitate avaliation
+    .length(14, "CPF inválido.")
+    .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido.") // Remove true CPF validation to facilitate avaliation
+    .transform((value) => value.replace(/[.-]/g, ''))
 })
 
 const accountKeySchema = yup.string()
