@@ -1,15 +1,69 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import { Formik } from 'formik'
 
 import { registerSchema } from '../utils/yupSchemas'
+
+import { graphql, commitMutation } from 'relay-runtime'
+import { AuthContext } from '@/context/auth'
+import { RelayEnvironment } from '@/relay/RelayEnvironment'
 
 import Input from '@/components/Input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Link } from 'react-router-dom'
+
+const mutation = graphql`
+  mutation registerMutation($input: AccountRegisterInput!) {
+    accountRegisterMutation(input: $input) {
+      token
+    }
+  }
+`
+
+const register = (input: Register, onCompleted: (response: any) => void, onError: (error: Error) => void) => {
+  commitMutation(RelayEnvironment, {
+    mutation,
+    variables: {
+      input,
+    },
+    onCompleted,
+    onError,
+  })
+}
+
+interface Register {
+  name: string,
+  password: string
+  confirmPassword?: string
+  email: string,
+  cpf: string,
+  account_key?: string,
+  date_of_birth: string,
+}
 
 const Register: React.FC = () => {
+  const { logIn } = useContext(AuthContext)
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
+
+  const handleRegister = ({ cpf, account_key, confirmPassword, ...rest }: Register) => {
+    const cpfParsed = cpf.replace(/[.-]/g, '')
+    console.log({ cpf: cpfParsed, account_key: cpfParsed, confirmPassword, ...rest })
+    register(
+      {
+        account_key: cpfParsed, cpf: cpfParsed, ...rest
+      },
+      (response) => {
+        console.log(response.accountRegisterMutation)
+        logIn(response.accountRegisterMutation?.token ?? '')
+        navigate('/')
+      },
+      (error) => {
+        setError(error.message)
+      }
+    )
+  }
 
   return (
     <div className="h-full w-full flex flex-col p-8 items-center justify-center bg-bgwoo">
@@ -21,13 +75,10 @@ const Register: React.FC = () => {
           email: "",
           password: "",
           confirmPassword: "",
-          dateOfBirth: "",
+          date_of_birth: "",
           cpf: ""
         }}
-        onSubmit={(values) => {
-
-          alert(JSON.stringify(values));
-        }}
+        onSubmit={handleRegister}
       >
         {({
           values,
@@ -39,6 +90,7 @@ const Register: React.FC = () => {
         }) => (
           <div className="border rounded-md border-gray-300 w-5/12 flex flex-col h-full pt-8 space-y-6 text-center bg-white">
             <p className="text-muted-foreground font-bold text-3xl">Crie sua conta</p>
+            {error && <div className="text-red-600 m-2 text-sm">{error}</div>}
             <form onSubmit={handleSubmit} className="space-y-4 w-full">
               <Input
                 id="name"
@@ -78,18 +130,18 @@ const Register: React.FC = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={errors.confirmPassword}
-                value={values.confirmPassword}
+                value={values.confirmPassword as string}
               />
               <Input
-                id="dateOfBirth"
+                id="date_of_birth"
                 type="text"
                 label="Data de nascimento"
                 mask="00/00/0000"
-                touched={touched.dateOfBirth}
+                touched={touched.date_of_birth}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={errors.dateOfBirth}
-                value={values.dateOfBirth}
+                error={errors.date_of_birth}
+                value={values.date_of_birth}
               />
               <Input
                 id="cpf"
@@ -124,7 +176,7 @@ const Register: React.FC = () => {
           </div>
         )
         }
-      </Formik >
+      </Formik>
     </div >
   )
 }
