@@ -66,7 +66,7 @@ const Register: React.FC = () => {
   }
 
   return (
-    <div className="h-full w-full flex flex-col p-8 items-center justify-center bg-bgwoo">
+    <div className="h-full w-full flex flex-col p-8 items-center justify-center bg-woo-gray">
       <h1 className="text-3xl font-bold m-8 mt-0">woopay</h1>
       <Formik
         validationSchema={registerSchema}
@@ -156,21 +156,21 @@ const Register: React.FC = () => {
               />
               <div className="text-start m-8 my-0">
                 <div className="flex my-6 justify-center items-center space-x-2">
-                  <Checkbox id="terms" required className="selection:bg-woovi checked:bg-woovi" />
+                  <Checkbox id="terms" required className="selection:bg-woo-green checked:bg-woo-green" />
                   <Label htmlFor="terms">
                     Eu aceito os
-                    <Link to='#' className="mx-1 underline text-woovi">Termos de Uso </Link>
+                    <Link to='#' className="mx-1 underline text-woo-green">Termos de Uso </Link>
                     e as
-                    <Link to='#' className="mx-1 underline text-woovi">políticas de privacidade.</Link>
+                    <Link to='#' className="mx-1 underline text-woo-green">políticas de privacidade.</Link>
                   </Label>
                 </div>
-                <Button type="submit" className="w-full bg-woovi hover:bg-woovi">
+                <Button type="submit" className="w-full bg-woo-green hover:bg-woo-green">
                   Cadastrar
                 </Button>
               </div>
               <div className="text-sm my-8 h-12 items-center justify-center">
                 Já tem uma conta?
-                <Link to='/login' className="ml-2 underline text-woovi">Entrar</Link>
+                <Link to='/login' className="ml-2 underline text-woo-green">Entrar</Link>
               </div>
             </form>
           </div>

@@ -44,7 +44,7 @@ const Input: React.FC<InputProps> = ({
           h-12 rounded-sm focus-visible:border-2 
           ${touched && error
             ? "focus-visible:border-red-600 ring-0 border-red-600"
-            : "focus-visible:border-woovi focus-visible:ring-0 hover:border-black hover:border-1"}
+            : "focus-visible:border-woo-green focus-visible:ring-0 hover:border-black hover:border-1"}
           `}
         {...rest}
       />

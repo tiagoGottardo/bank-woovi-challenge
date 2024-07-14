@@ -54,7 +54,7 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className="h-screen w-full flex flex-col p-8 items-center  bg-bgwoo">
+    <div className="h-screen w-full flex flex-col p-8 items-center  bg-woo-gray">
       <h1 className="text-3xl font-bold m-8 mt-0">woopay</h1>
       <Formik
         validationSchema={loginSchema}
@@ -97,13 +97,13 @@ const Login: React.FC = () => {
                 value={values.password}
               />
               <div className="text-center m-8 my-0">
-                <Button type="submit" className="w-full bg-woovi hover:bg-woovi">
+                <Button type="submit" className="w-full bg-woo-green hover:bg-woo-green">
                   Entrar
                 </Button>
               </div>
               <div className="text-sm my-8 h-12 items-center justify-center">
                 É novo por aqui?
-                <Link to='/register' className="ml-2 underline text-woovi">Cadastre-se</Link>
+                <Link to='/register' className="ml-2 underline text-woo-green">Cadastre-se</Link>
               </div>
             </form>
           </div>
