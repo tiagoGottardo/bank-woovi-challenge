@@ -18,8 +18,9 @@ module.exports = {
     },
     extend: {
       colors: {
-        "woovi": "#03D69D",
-        "bgwoo": "#F8F8F8",
+        "woo-green": "#03D69D",
+        "woo-gray": "#F8F8F8",
+        "woo-blue": "#133A6F"
       },
       keyframes: {
         "accordion-down": {
