@@ -107,8 +107,7 @@ const Login: React.FC = () => {
               </div>
             </form>
           </div>
-        )
-        }
+        )}
       </Formik>
     </div>
   )

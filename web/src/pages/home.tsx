@@ -2,13 +2,13 @@ import React from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import Header from '@/components/Header'
-import { Button } from "@/components/ui/button"
 import TransactionList from '@/components/TransactionsList'
 import { graphql } from 'relay-runtime'
 import { useLazyLoadQuery } from 'react-relay'
 import { homeQuery } from './__generated__/homeQuery.graphql'
+import TransactionsDisplay from '@/components/TransactionsDisplay'
 
-const HomeQuery = graphql`
+export const HomeQuery = graphql`
   query homeQuery {
     ...TransactionsListQuery
     meQuery {
@@ -31,11 +31,8 @@ const Home: React.FC = () => {
     return words[0].slice(0, 1) + words[1].slice(0, 1);
   }
 
-  const handleDeposit = () => { }
-  const handleWithdraw = () => { }
-  const handleTransfer = () => { }
   return (
-    <div className="flex flex-col h-full items-center bg-woo-gray justify-start bg-background">
+    <div className="flex flex-col min-h-screen h-full  items-center bg-woo-gray justify-start bg-background">
       <Header />
       <Card className="w-full m-2 max-w-6xl">
         <CardContent className="m-8">
@@ -48,11 +45,7 @@ const Home: React.FC = () => {
                 <div className="text-4xl font-bold">R${(Number(balance_in_cents) / 100).toFixed(2)}</div>
               </CardContent>
             </Card>
-            <div className="flex flex-col gap-4">
-              <Button className="bg-woo-blue font-bold hover:bg-woo-blue" onClick={handleDeposit}>Depositar</Button>
-              <Button className="bg-woo-blue font-bold hover:bg-woo-blue" onClick={handleWithdraw}>Sacar</Button>
-              <Button className="bg-woo-blue font-bold hover:bg-woo-blue" onClick={handleTransfer}>Transferir</Button>
-            </div>
+            <TransactionsDisplay />
             <Card>
               <CardHeader>
                 <CardTitle>Conta</CardTitle>
@@ -64,8 +57,7 @@ const Home: React.FC = () => {
                     <AvatarFallback>{getTwoFirstLetters(name)}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="font-medium">{name}</div>
-                    <div className="text-muted-foreground text-sm">@{account_key}</div>
+                    <div className="font-medium">{name}</div> <div className="text-muted-foreground text-sm">@{account_key}</div>
                   </div>
                 </div>
               </CardContent>
@@ -75,9 +67,9 @@ const Home: React.FC = () => {
             <h1 className="text-3xl m-4 font-bold">Transações</h1>
             <TransactionList query={query} />
           </div>
-        </CardContent >
-      </Card >
-    </div >
+        </CardContent>
+      </Card>
+    </div>
   )
 }
 
