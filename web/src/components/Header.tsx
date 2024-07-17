@@ -16,7 +16,7 @@ const Header: React.FC = () => {
 
   return (
     <div className="flex w-full px-32 justify-between">
-      <h1 className="text-3xl m-4">woopay</h1>
+      <img src="../../public/woopay-logo.png" className="h-10 m-4 self-center" />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className="bg-background m-4 border-0 hover:bg-background">

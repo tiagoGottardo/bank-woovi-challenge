@@ -55,7 +55,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="h-screen w-full flex flex-col p-8 items-center  bg-woo-gray">
-      <h1 className="text-3xl font-bold m-8 mt-0">woopay</h1>
+      <img src="../../public/woopay-logo.png" className="h-16 m-8 mt-0" />
       <Formik
         validationSchema={loginSchema}
         initialValues={{
