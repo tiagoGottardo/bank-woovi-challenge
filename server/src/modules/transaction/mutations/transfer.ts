@@ -18,7 +18,7 @@ export const transferMutation = mutationWithClientMutationId({
     const { idempotencyKey, amount_in_cents, receiver_account_key } = args
 
     if (!account) { throw new Error("Token is not valid!") }
-    if (amount_in_cents < 0) { throw new Error("Amount must be greater than 0.") }
+    if (amount_in_cents <= 0) { throw new Error("Amount must be greater than 0.") }
 
     const receiverAccount = await AccountModel.findOne({ account_key: receiver_account_key }).select("_id")
     if (!receiverAccount) { throw new Error("Receiver account not found.") }
