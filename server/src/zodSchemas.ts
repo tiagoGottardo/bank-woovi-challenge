@@ -34,13 +34,11 @@ const accountSchema = z.object({
     message: "Account key must contain only letters, numbers, and underscores.",
   }),
   date_of_birth: z.string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format. Expected YYYY-MM-DD.")
+    .regex(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/,
+      "Invalid date format. Expected DD/MM/YYYY.")
     .transform((str) => {
-      const date = new Date(`${str}T00:00:00.000Z`)
-      if (isNaN(date.getTime())) {
-        throw new Error("Invalid date.")
-      }
-      return date
+      const [day, month, year] = str.split('/').map(Number);
+      return new Date(year, month - 1, day);
     })
     .refine((date) => {
       const now = new Date()
