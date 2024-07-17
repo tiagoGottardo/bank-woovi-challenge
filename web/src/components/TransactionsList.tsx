@@ -8,7 +8,7 @@ import { Button } from "./ui/button"
 
 const TransactionQuery = graphql`
 fragment TransactionsListQuery on Query
-      @argumentDefinitions(first: { type: Int, defaultValue: 5 }, after: { type: String })
+  @argumentDefinitions(first: { type: Int, defaultValue: 5 }, after: { type: String })
       @refetchable(queryName: "TransactionsListPaginationQuery") {
         getTransactionsQuery(first: $first, after: $after) @connection(key: "TransactionsList_getTransactionsQuery", filters: []) {
           endCursorOffset
@@ -52,7 +52,7 @@ const TransactionList: React.FC<Props> = (props) => {
     <>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow >
             <TableHead>Data</TableHead>
             <TableHead>Tipo</TableHead>
             <TableHead>Origem</TableHead>
@@ -65,8 +65,7 @@ const TransactionList: React.FC<Props> = (props) => {
               <Transaction me={data?.meQuery?.id} key={transaction?.node?.id}
                 transaction={transaction?.node} />
             ))
-          }
-        </TableBody>
+          } </TableBody>
       </Table>
       {data?.getTransactionsQuery.edges.length === 0 && (
         <div className="flex justify-center my-16">
@@ -75,14 +74,13 @@ const TransactionList: React.FC<Props> = (props) => {
       )}
       {
         hasNext && (
-          <div className="flex justify-end w-full p-6 m-4">
-            <Button className="bg-woo-green hover:bg-woo-green font-bold" onClick={handleLoadMore}>Mais</Button>
+          <div className="flex justify-end w-full p-6 mb-0">
+            <Button className="bg-woo-blue hover:bg-woo-blue font-bold" onClick={handleLoadMore}>Mais</Button>
           </div>
         )
       }
     </>
   )
-
 }
 
 export default TransactionList
