@@ -114,6 +114,9 @@ const TransactionsDisplay = () => {
                 setErrors({ account_key: "Conta não encontrada." })
               }
               break;
+            case "Your withdraw amount is greater than your balance.":
+              setErrors({ value: "O valor do saque é maior que seu saldo." })
+              break;
             case "Transaction amount is greater than your balance.":
               setErrors({ value: "O valor da transação é maior que seu saldo." })
               break;
@@ -131,7 +134,7 @@ const TransactionsDisplay = () => {
     <div className="flex flex-col gap-4">
       <Dialog open={openDeposit} onOpenChange={setOpenDeposit}>
         <DialogTrigger asChild>
-          <Button onClick={() => setIdempotencyKey(`${uuidv4}`)} className="bg-woo-blue font-bold hover:bg-woo-blue">
+          <Button onClick={() => setIdempotencyKey(`${uuidv4()}`)} className="bg-woo-blue font-bold hover:bg-woo-blue">
             Depositar
           </Button>
         </DialogTrigger>
@@ -175,7 +178,7 @@ const TransactionsDisplay = () => {
       </Dialog>
       <Dialog open={openWithdraw} onOpenChange={setOpenWithdraw}>
         <DialogTrigger asChild>
-          <Button onClick={() => setIdempotencyKey(`${uuidv4}`)} className="bg-woo-blue font-bold hover:bg-woo-blue">
+          <Button onClick={() => setIdempotencyKey(`${uuidv4()}`)} className="bg-woo-blue font-bold hover:bg-woo-blue">
             Sacar
           </Button>
         </DialogTrigger>
@@ -220,7 +223,7 @@ const TransactionsDisplay = () => {
       </Dialog>
       <Dialog open={openTransfer} onOpenChange={setOpenTransfer}>
         <DialogTrigger asChild>
-          <Button onClick={() => setIdempotencyKey(`${uuidv4}`)} className="bg-woo-blue font-bold hover:bg-woo-blue">
+          <Button onClick={() => setIdempotencyKey(`${uuidv4()}`)} className="bg-woo-blue font-bold hover:bg-woo-blue">
             Transferir
           </Button>
         </DialogTrigger>
