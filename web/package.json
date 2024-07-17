@@ -11,6 +11,8 @@
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-checkbox": "^1.1.1",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
@@ -28,6 +30,7 @@
     "relay-runtime": "17.0.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^10.0.0",
     "yup": "^1.4.0",
     "zod": "^3.23.8"
   },
@@ -39,6 +42,7 @@
     "@types/react-relay": "16.0.6",
     "@types/react-router-dom": "^5.3.3",
     "@types/relay-runtime": "17.0.1",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
     "@vitejs/plugin-react": "^4.3.1",

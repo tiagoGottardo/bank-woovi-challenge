@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog"
@@ -130,7 +131,7 @@ const TransactionsDisplay = () => {
     <div className="flex flex-col gap-4">
       <Dialog open={openDeposit} onOpenChange={setOpenDeposit}>
         <DialogTrigger asChild>
-          <Button onClick={() => setIdempotencyKey(`${Math.random()}`)} className="bg-woo-blue font-bold hover:bg-woo-blue">
+          <Button onClick={() => setIdempotencyKey(`${uuidv4}`)} className="bg-woo-blue font-bold hover:bg-woo-blue">
             Depositar
           </Button>
         </DialogTrigger>
@@ -174,7 +175,7 @@ const TransactionsDisplay = () => {
       </Dialog>
       <Dialog open={openWithdraw} onOpenChange={setOpenWithdraw}>
         <DialogTrigger asChild>
-          <Button className="bg-woo-blue font-bold hover:bg-woo-blue">
+          <Button onClick={() => setIdempotencyKey(`${uuidv4}`)} className="bg-woo-blue font-bold hover:bg-woo-blue">
             Sacar
           </Button>
         </DialogTrigger>
@@ -219,7 +220,7 @@ const TransactionsDisplay = () => {
       </Dialog>
       <Dialog open={openTransfer} onOpenChange={setOpenTransfer}>
         <DialogTrigger asChild>
-          <Button className="bg-woo-blue font-bold hover:bg-woo-blue">
+          <Button onClick={() => setIdempotencyKey(`${uuidv4}`)} className="bg-woo-blue font-bold hover:bg-woo-blue">
             Transferir
           </Button>
         </DialogTrigger>
