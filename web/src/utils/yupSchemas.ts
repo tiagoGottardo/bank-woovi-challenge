@@ -46,13 +46,21 @@ const loginSchema = yup.object().shape({
     .matches(/[@#$%^&*()_+!~`\-=<>?[\]{}|;:,./]/, "Sua senha precisa conter um caractere especial."),
 })
 
-const accountKeySchema = yup.string()
-  .min(8, "Account key must be at least 8 characters long.")
-  .max(50, "Account key must be no longer than 50 characters.")
-  .matches(/^[A-Za-z0-9_]+$/, "Account key must contain only letters, numbers, and underscores.")
+const transferSchema = yup.object().shape({
+  value: yup.string()
+    .required("Digite o valor."),
+  account_key: yup.string()
+    .required("Digite a chave do recebedor.")
+})
+
+const valueSchema = yup.object().shape({
+  value: yup.string().
+    required("Digite o valor."),
+})
 
 export {
-  accountKeySchema,
+  transferSchema,
+  valueSchema,
   loginSchema,
   registerSchema
 }
