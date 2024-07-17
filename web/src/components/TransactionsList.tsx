@@ -55,7 +55,7 @@ const TransactionList: React.FC<Props> = (props) => {
           <TableRow >
             <TableHead>Data</TableHead>
             <TableHead>Tipo</TableHead>
-            <TableHead>Origem</TableHead>
+            <TableHead>Destino/Origem</TableHead>
             <TableHead>Valor</TableHead>
           </TableRow>
         </TableHeader>

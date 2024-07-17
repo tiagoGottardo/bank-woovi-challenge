@@ -47,7 +47,7 @@ const Transaction: React.FC<Props> = (props) => {
 
   const getOrigin = (me?: string, sender?: Person, receiver?: Person) => {
     if (sender && receiver) {
-      return me == sender.id ? sender.name : receiver.name
+      return me == sender.id ? receiver.name : sender.name
     }
   }
 
@@ -59,7 +59,7 @@ const Transaction: React.FC<Props> = (props) => {
     <TableRow>
       <TableCell>{formattedDate}</TableCell>
       <TableCell>{getType(sender_account?.id, receiver_account?.id)}</TableCell>
-      <TableCell>{getOrigin(me, sender_account, receiver_account)}</TableCell>
+      <TableCell>{getOrigin(me, sender_account, receiver_account) || "Externo"}</TableCell>
       <TableCell className={isGreen ? "text-red-500" : "text-green-500"}>R${isGreen && "-"}{(amount_in_cents / 100).toFixed(2)}</TableCell>
     </TableRow >
   )
