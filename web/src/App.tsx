@@ -7,6 +7,7 @@ import PrivateRoute from './private'
 import { Routes, Route, BrowserRouter } from "react-router-dom"
 
 function App() {
+
   return (
     <BrowserRouter>
       <Routes>

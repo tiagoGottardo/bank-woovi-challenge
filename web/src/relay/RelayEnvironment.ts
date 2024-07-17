@@ -5,10 +5,12 @@ import {
   Store,
   FetchFunction,
 } from "relay-runtime"
+import { navigateTo } from "@/utils/navigation"
 
 const HTTP_ENDPOINT = "http://localhost:3000/graphql"
 
 const fetchFn: FetchFunction = async (request, variables) => {
+
   return fetch(HTTP_ENDPOINT, {
     method: "POST",
     headers: {
@@ -27,6 +29,7 @@ const fetchFn: FetchFunction = async (request, variables) => {
     if (json && json.errors) {
       if (json.errors[0].message == 'Token is not valid!') {
         localStorage.removeItem('authToken')
+        navigateTo('/login')
       }
 
       throw new Error(json.errors[0].message)

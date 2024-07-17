@@ -9,7 +9,7 @@ type AuthContextType = {
 export const AuthContext = createContext({} as AuthContextType)
 
 export const AuthProvider = ({ children }: any) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(true)
 
   useEffect(() => {
     const token = localStorage.getItem('authToken') || null

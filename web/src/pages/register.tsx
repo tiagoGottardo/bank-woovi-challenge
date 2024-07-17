@@ -47,15 +47,15 @@ const Register: React.FC = () => {
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
-  const handleRegister = ({ cpf, account_key, confirmPassword, ...rest }: Register) => {
+  const handleRegister = ({ cpf, account_key, confirmPassword, name, ...rest }: Register) => {
     const cpfParsed = cpf.replace(/[.-]/g, '')
-    console.log({ cpf: cpfParsed, account_key: cpfParsed, confirmPassword, ...rest })
+    const randomDigits = Math.floor(10000 + Math.random() * 90000).toString();
+    const nameWithRandomDigits = name.split(' ')[0].toLowerCase() + randomDigits
     register(
       {
-        account_key: cpfParsed, cpf: cpfParsed, ...rest
+        account_key: nameWithRandomDigits, cpf: cpfParsed, name, ...rest
       },
       (response) => {
-        console.log(response.accountRegisterMutation)
         logIn(response.accountRegisterMutation?.token ?? '')
         navigate('/')
       },
