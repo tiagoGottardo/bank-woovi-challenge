@@ -1,0 +1,60 @@
+services:
+  database:
+    image: mongo:latest
+    hostname: database 
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root 
+      MONGO_INITDB_ROOT_PASSWORD: password 
+      MONGO_INITDB_DATABASE: bank 
+    volumes:
+      - data:/data/db
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+  backend: &app
+    hostname: backend 
+    container_name: backend 
+    build: ./server/
+    depends_on: 
+      - database 
+    environment:
+      PORT: 3001
+      MONGODB_URI: mongodb://root:password@database:27017
+      JWT_SECRET: woovi-secret
+    ports:
+      - "3001:3001"
+    expose:
+      - 3001
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '2GB'
+  frontend: 
+    <<: *app
+    hostname: frontend 
+    container_name: frontend 
+    build: ./web/
+    depends_on: 
+      - backend 
+    environment:
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    expose:
+      - 3000
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  data:
+    driver: local

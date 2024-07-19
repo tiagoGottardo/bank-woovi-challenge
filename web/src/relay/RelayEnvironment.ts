@@ -6,7 +6,7 @@ import {
   FetchFunction,
 } from "relay-runtime"
 
-const HTTP_ENDPOINT = "https://server-little-darkness-3240.fly.dev/graphql"
+const HTTP_ENDPOINT = "http://localhost:3001/graphql"
 
 const fetchFn: FetchFunction = async (request, variables) => {
 

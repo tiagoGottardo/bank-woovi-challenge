@@ -26,13 +26,18 @@ router.all('/playground', async (ctx: Koa.Context) => {
 router.all('/graphql', createHandler({
   schema,
   context: async (req: Request): Promise<any> => {
+    console.log("Req")
     const { account } = await getAccountByToken(req.headers.authorization)
     return getContext({ account, req })
   }
 }))
 
 app
-  .use(cors())
+  .use(cors({
+    origin: '*', // Adjust this to match your frontend URL
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowHeaders: ['Content-Type', 'Authorization']
+  }))
   .use(router.routes())
   .use(router.allowedMethods())
 
