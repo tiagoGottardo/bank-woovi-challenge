@@ -49,11 +49,11 @@ $ cd bank-woovi-challenge
 
 # Run docker compose 
 
-$ docker compose up
+$ docker compose up -d
 
 ```
 
 #### Access project
 
-- htttp://localhost:3000 (Frontend)
-- htttp://localhost:3001/playground (Backend)
+- http://localhost:3000 (Frontend)
+- http://localhost:3001/playground (Backend)
