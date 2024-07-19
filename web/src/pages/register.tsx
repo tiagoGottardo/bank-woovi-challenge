@@ -67,7 +67,7 @@ const Register: React.FC = () => {
 
   return (
     <div className="h-full w-full flex flex-col p-8 items-center justify-center bg-woo-gray">
-      <img src="../../public/woopay-logo.png" className="h-16 m-8 mt-0" />
+      <img src="/woopay-logo.png" className="h-16 m-8 mt-0" />
       <Formik
         validationSchema={registerSchema}
         initialValues={{

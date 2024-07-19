@@ -7,10 +7,6 @@ import { graphql } from 'relay-runtime'
 import { useLazyLoadQuery } from 'react-relay'
 import { homeQuery } from './__generated__/homeQuery.graphql'
 import TransactionsDisplay from '@/components/TransactionsDisplay'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { setNavigate } from '../utils/navigation'
-
 
 export const HomeQuery = graphql`
   query homeQuery {
@@ -25,11 +21,6 @@ export const HomeQuery = graphql`
 `
 
 const Home: React.FC = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setNavigate(navigate);
-  }, [navigate]);
 
   const query = useLazyLoadQuery<homeQuery>(HomeQuery, {})
   if (!query?.meQuery) { return }

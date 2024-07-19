@@ -6,7 +6,12 @@ export const connectDatabase = async () => {
     console.log('Database connection was closed!')
   })
 
-  mongoose.connect(config.MONGODB_URI)
+  mongoose.set('debug', true);
+
+  mongoose.connect(config.MONGODB_URI, {
+    dbName: "bank",
+    connectTimeoutMS: 20000
+  })
     .then(() => console.log('MongoDB connected'))
     .catch((err: any) => console.error('MongoDB connection error:', err))
 }

@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "relay-compiler && vite",
-    "build": "relay-compiler --validate && tsc -b && vite build",
-    "relay": "relay-compiler"
+    "dev": "pnpm run relay && vite",
+    "build": "npx vite build",
+    "start": "npx serve -s dist",
+    "relay": "npx relay-compiler --validate"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.0",
@@ -35,6 +36,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.8",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
